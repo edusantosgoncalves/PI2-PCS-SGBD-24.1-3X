@@ -2,7 +2,7 @@
 
 ![3X - Logo](https://github.com/edusantosgoncalves/PI2-PCS-SGBD-24.1-3X/blob/main/outros/Logo300x.png "3X - Logo")
 
-## [Projeto e Construção de Sistemas / Projeto Integrador II (PCS-SGBD / PI2) - 2024.1 - BSI - UNIRIO](https://github.com/edusantosgoncalves/PI2-PCS-SGBD-24.1-3X)
+## [Projeto e Construção de Sistemas com SGBD / Projeto Integrador II (PCS-SGBD / PI2) - 2024.1 - BSI - UNIRIO](https://github.com/edusantosgoncalves/PI2-PCS-SGBD-24.1-3X)
 
 ## _Grupo 1:_ _[Eduardo Santos](https://github.com/edusantosgoncalves), [Eric Leal](https://github.com/lealeric), [Priscilla Souza](https://github.com/priscillasz) e [Vívian Ferraro](https://github.com/viferraro)_
 
