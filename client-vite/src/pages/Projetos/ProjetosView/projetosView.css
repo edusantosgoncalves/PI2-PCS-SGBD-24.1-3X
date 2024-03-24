@@ -1,0 +1,50 @@
+.view {
+    display: flex;
+}
+
+
+.textoSwitch {
+    color: var(--branco);
+    text-shadow: 2px 2px 5px var(--nvEscuro);
+}
+
+.Times {
+    display: grid;
+    grid-template-columns: 100px 3fr 10%;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+
+.principalTimes {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2%;
+
+}
+
+.gridTimes {
+    background-color: var(--fundo-claro);
+    padding: 5%;
+    border-radius: 5px;
+    box-shadow: 10px;
+}
+
+
+.cardTimes {
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 20px;
+    box-shadow:
+        0.5px 0.9px 0.3px rgba(0, 0, 0, 0.053),
+        1.6px 2.9px 1.1px rgba(0, 0, 0, 0.077),
+        7px 13px 5px rgba(0, 0, 0, 0.13);
+}
+
+.cardTimes a {
+    background-color: transparente;
+}

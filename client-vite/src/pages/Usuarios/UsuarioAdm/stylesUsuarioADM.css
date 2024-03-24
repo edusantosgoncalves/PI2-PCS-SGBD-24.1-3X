@@ -1,0 +1,79 @@
+/* .Usuarios-ADM {
+  display: grid;
+  grid-template-columns: 100px 3fr 10%;
+  grid-template-rows: 75px 100vh;
+  grid-template-areas: "header-logo header-nome header-perfil"
+    "menu main main";
+} */
+
+.BarraLogo {
+  position: absolute;
+}
+
+.txtValidar {
+  align-self: center;
+  align-items: center;
+  color: white;
+}
+
+.principalUsuarios {
+  grid-area: main;
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  padding: 5%;
+  justify-items: center;
+
+
+
+  /*display: flex;display: inherit;
+  justify-content: space-between;
+  max-width: 90%;
+  justify-content: center;
+  align-items: flex-start;*/
+}
+
+/* .gridTarefas{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+} */
+
+
+.divBotaoFim {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 5%;
+  padding-top: 1%;
+  width: fit-content;
+  justify-content: space-between;
+  flex-direction: row;
+  ;
+}
+
+.botaoAlterar {
+  justify-self: flex-start;
+  padding: 1%;
+}
+
+.tbl {
+  
+}
+
+.tblAparece {
+  display: inherit;
+}
+
+.tblNao {
+  display: none;
+}
+
+
+.naoMostrarBtn {
+  visibility: hidden;
+}
+
+.mostrarBtn {
+  visibility: visible;
+}

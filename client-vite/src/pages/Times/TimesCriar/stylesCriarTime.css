@@ -1,0 +1,63 @@
+.mainCria{
+    display: grid;
+    grid-template-columns: 100px 3fr 80px;
+    grid-template-rows: 10vh 80vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        " main main main";
+}
+
+.BarraLogo {
+    position: absolute;
+}
+
+.principalCriaTime {
+    grid-area: main;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    height: 90%;
+}
+
+.boxNovoTime{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 2%;
+    border: solid var(--borda-escura);
+    border-top: 0;
+    border-radius: 5%;
+    border-width: 2px;
+    background-color: var(--nvClaroFundo);
+    height: 90%;
+    padding: 2%;
+    margin: 2%;
+    margin-left: 0.6%;
+}
+
+.containerNome {
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3%;
+} 
+
+.containerDados{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;    
+}
+
+.containerExibeDados {
+    padding: auto;
+}
+
+.titulo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--nvClaroFundo);
+}
+
+.containerSalvar{
+    justify-content: end;
+}

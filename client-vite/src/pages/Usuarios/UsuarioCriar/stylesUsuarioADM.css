@@ -1,0 +1,68 @@
+.Usuarios-ADM {
+  display: grid;
+  grid-template-columns: 100px 3fr 10%;
+  grid-template-rows: 75px 100vh;
+  grid-template-areas: "header-logo header-nome header-perfil"
+    "menu main main";
+}
+
+.BarraLogo {
+  position: absolute;
+}
+
+.txtValidar {
+  align-self: center;
+  align-items: center;
+  color: white;
+}
+
+.divMeio {
+
+  grid-area: main;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5%;
+  justify-items: center;
+
+
+  /*display: flex;display: inherit;
+  justify-content: space-between;
+  max-width: 90%;
+  justify-content: center;
+  align-items: flex-start;*/
+}
+
+/* .divBotaoAddCriar {
+  display: flex;
+  justify-self: flex-start;
+  padding: 1%;
+  flex-direction: row;
+} */
+
+
+.divBotaoFimCriar {
+  display: flex;
+  align-items: center;
+  column-gap: 5%;
+  padding: 1%;
+  width: 30%;
+  flex-direction: row;
+}
+
+.tblAparece {
+  display: inherit;
+}
+
+.tblNao {
+  display: none;
+}
+
+
+.naoMostrarBtn {
+  visibility: hidden;
+}
+
+.mostrarBtn {
+  visibility: visible;
+}

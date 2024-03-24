@@ -1,0 +1,97 @@
+ .LoginPage {
+   text-align: center;
+ }
+
+ .LoginPage-logo {
+   height: 40vmin;
+   pointer-events: none;
+ }
+
+ @media (prefers-reduced-motion: no-preference) {
+   .LoginPage-logo {
+     animation: App-logo-spin infinite 20s linear;
+   }
+ }
+
+ .LoginPage-header {
+   background-color: #282c34;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: left;
+   font-size: calc(10px + 2vmin);
+   color: white;
+   max-height: fit-content;
+   padding: 20px;
+ }
+
+ .img-logo img {
+   width: 100px;
+   border-color: antiquewhite;
+   display: flex;
+ }
+
+ .LoginPage-link {
+   color: #61dafb;
+ }
+
+ @keyframes App-logo-spin {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ /*  BOTÃO GOOGLE  */
+ .btnGoogle {
+   transition: background-color 0.3s, box-shadow 0.3s;
+   border: none;
+   border-radius: 3px;
+   cursor: pointer;
+   color: #555555;
+   font-weight: 500;
+   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+   background-color: white;
+   background-repeat: no-repeat;
+   background-position: 12px 9px;
+   margin-top: 5px;
+   text-emphasis: none;;
+ }
+
+ .btnGoogle:hover {
+   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);
+   background-color: rgb(219, 219, 219);
+   color: #181818;
+ }
+
+ .btnGoogle:active {
+   background-color: #eeeeee;
+ }
+
+ .btnGoogle:focus {
+   outline: none;
+   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25), 0 0 0 3px #c8dafc;
+ }
+
+ .btnGoogle:disabled {
+   filter: grayscale(100%);
+   background-color: #ebebeb;
+   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+   cursor: not-allowed;
+ }
+
+ .menuMeio {
+   display: flex;
+   flex-flow: row wrap;
+   margin: 0 auto;
+   padding: 20px;
+   justify-content: center;
+   margin-top: auto;
+ }
+
+ .grid-login{
+  background-color: transparent;
+ }

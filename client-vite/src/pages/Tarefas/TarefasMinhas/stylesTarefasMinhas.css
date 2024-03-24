@@ -1,0 +1,56 @@
+.minhas-tarefas {
+    display: grid;
+    grid-template-columns: 100px 3fr 10%;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+.principal-minhas-tarefas {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
+
+.container-minha-tarefa {
+    flex-direction: column;
+    align-items: baseline;
+}
+
+.container-filtro-minhas-tarefas {
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--fundo-claro);
+    padding: 5%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    gap: 5%;
+    padding-bottom: 0;
+}
+
+.select-filtro-minhas-tarefas {
+    width: 20vh;
+    background-color: var(--cinza-claro);
+}
+
+.container-exibe-minhas-tarefas {
+    justify-content: start;
+    background-color: var(--fundo-claro);
+    padding: 5%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.titulo-minhas-tarefas {
+    font-size: 1.5rem;
+    color: var(--preto);
+    margin-bottom: 5%;
+    text-shadow: 2px 1px 5px #454ea5;
+}
+
+.input-filtro-minhas-tarefas {
+    font-size: 30px;
+}

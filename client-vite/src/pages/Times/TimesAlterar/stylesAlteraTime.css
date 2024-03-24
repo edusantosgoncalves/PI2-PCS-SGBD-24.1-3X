@@ -1,0 +1,67 @@
+.mainAltera{
+    display: grid;
+    grid-template-columns: 100px 3fr 80px;
+    grid-template-rows: 10vh 80vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        " main main main";
+}
+
+.BarraLogo {
+    position: absolute;
+}
+
+.principalAlteraTime {
+    grid-area: main;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    height: 90%;
+    margin-top: 5%;
+}
+
+.boxAlterarTime{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 2%;
+    border: solid var(--borda-escura);
+    border-radius: 5%;
+    border-width: 2px;
+    background-color: var(--cinza-claro-transparente);
+    height: 90%;
+    padding: 2%;
+    margin: 2%;
+    margin-left: 0.6%;
+}
+
+.containerNome {
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3%;
+} 
+
+.containerNome input {
+    font-size: 1.5em;
+    width: 100%;
+}
+
+.containerDados{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;    
+}
+
+.containerExibeDados {
+    padding: auto;
+}
+
+.titulo {
+    text-shadow: var(--preto) 10px 0 10px;
+    color: var(--branco);
+}
+
+.containerSalvar{
+    justify-content: end;
+}

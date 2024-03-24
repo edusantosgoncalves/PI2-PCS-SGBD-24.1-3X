@@ -1,0 +1,41 @@
+.Times {
+    display: grid;
+    grid-template-columns: 100px 3fr 10%;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+.BarraLogo {
+    position: absolute;
+}
+
+.principalTimes {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2%;
+
+}
+
+.gridTimes{
+    background-color: var(--fundo-claro);
+    padding: 5%;
+    border-radius: 5px;
+    box-shadow: 10px;
+}
+
+.ocultar{
+    visibility: hidden;
+}
+
+.cardTimes {
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardTimes a {
+    background-color: transparente;
+}

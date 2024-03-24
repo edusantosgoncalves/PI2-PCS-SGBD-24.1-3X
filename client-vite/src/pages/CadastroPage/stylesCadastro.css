@@ -1,0 +1,74 @@
+.Cadastro {
+    display: grid;
+    grid-template-columns: 8% 3fr;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome"
+        "main main";
+}
+
+/* HEADER */
+
+.container-header {
+    background-color: var(--fundo-escuro);
+    font-size: calc(10px + 2vmin);
+    color: white;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.container-header img {
+    width: calc(50px + 2vmin);
+}
+
+.img-logo {
+    grid-area: header-logo;
+}
+
+.app-name {
+    grid-area: header-nome;
+}
+
+
+
+/* Formulário */
+
+.perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-form {
+    grid-area: main;
+    width: auto;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    margin-top: 3vh;
+    padding: 1em;
+    border-radius: 15px;
+}
+
+.endereco {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: right;
+    padding: 2% 0%;
+}
+
+.tamanhoReduzido {
+    width: 25px;
+}
+
+button {
+    display: flex;
+}
+
+a {
+    background-color: var(--fundo-escuro);
+}

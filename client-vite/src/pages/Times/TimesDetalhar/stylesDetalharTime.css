@@ -1,0 +1,56 @@
+.mainDetalha {
+    display: grid;
+    grid-template-columns: 100px 3fr 80px;
+    grid-template-rows: 10vh 80vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        " main main main";
+    /*text-shadow: var(--preto) 10px 0 10px;*/
+    color: var(--branco);
+}
+
+.principalDetalha {
+    grid-area: main;
+    display: flex;
+    justify-items: center;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 80%;
+    min-width: 50%;
+    /*border-radius: 5%;*/
+    margin-top: 2em;
+    background-color: var(--fundo-claro);
+    border-radius: 20px;
+    box-shadow:
+        0.5px 0.9px 0.3px rgba(0, 0, 0, 0.053),
+        1.6px 2.9px 1.1px rgba(0, 0, 0, 0.077),
+        7px 13px 5px rgba(0, 0, 0, 0.13);
+}
+
+.boxDetalha {
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 100%;
+    padding: 7% 0 0 5%;
+}
+
+.detalhaTime {
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.botoesDetalha {
+    padding-bottom: 3%;
+    justify-content: space-between;
+}
+
+.botoesDetalha button {
+    max-width: fit-content;
+}
+
+.detalhaIntegrantetime {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}

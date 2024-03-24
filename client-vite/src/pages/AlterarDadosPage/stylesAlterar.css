@@ -1,0 +1,61 @@
+.AlterarDados {
+    display: grid;
+    grid-template-columns: 8% 3fr;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome"
+        "main main";
+}
+
+
+/* HEADER */
+
+.container-header {
+    background-color: var(--fundo-escuro);
+    font-size: calc(10px + 2vmin);
+    color: white;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.container-header img {
+    width: calc(50px + 2vmin);
+}
+
+.img-logo {
+    grid-area: header-logo;
+}
+
+.app-name {
+    grid-area: header-nome;
+}
+
+
+/* Formulário */
+.container-formulario {
+    grid-area: main;
+    border: 1px solid;
+    width: 50vh;
+    height: 70vh;
+    justify-self: center;
+    align-self: flex-start;
+    margin-top: 3vh;
+    background-color: var(--nvClaroFundo);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+input {
+    width: 30vh;
+    margin-top: 1vh;
+    margin-left: 2vh;
+    margin-right: 2vh;
+}
+
+button {
+    display: flex;
+}

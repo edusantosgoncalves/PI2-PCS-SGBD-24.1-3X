@@ -1,0 +1,46 @@
+.Home {
+    display: grid;
+    grid-template-columns: 100px 3fr 80px;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+
+/* CARDS */
+
+.principal {
+    grid-area: main;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2%;
+    flex-direction: row;
+}
+
+.cards {
+    text-align: left;
+    border-radius: 5%;
+    border-radius: 5px;
+    background-color: var(--nvClaroFundo);
+    width: 30%;
+    height: 300px;
+    margin-top: 10%;
+    padding: 2%;
+    margin-left: 0.6%;
+    box-shadow: 0.5px 0.9px 0.3px rgba(0, 0, 0, 0.053), 1.6px 2.9px 1.1px rgba(0, 0, 0, 0.077), 7px 13px 5px rgba(0, 0, 0, 0.13);
+}
+
+.cards h4 {
+    font-size: medium;
+}
+
+/* Visibilidade do card usuário para o Operacional... */
+.cardsUsu {
+    visibility: hidden;
+}
+
+.cardsUsu>* {
+    visibility: hidden;
+
+}

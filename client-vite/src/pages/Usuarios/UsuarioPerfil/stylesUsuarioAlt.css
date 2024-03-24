@@ -1,0 +1,102 @@
+.Usuarios-ADM-aletra {
+  display: grid;
+  grid-template-columns: 100px 3fr 10%;
+  grid-template-rows: 75px 100vh;
+  grid-template-areas: "header-logo header-nome header-perfil"
+    "menu main main";
+}
+
+.BarraLogo {
+  position: absolute;
+}
+
+.txtValidar {
+  align-self: center;
+  align-items: center;
+  color: white;
+}
+
+.principalAlteraUsuario {
+  grid-area: main;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5%;
+  justify-items: center;
+}
+
+.containerPerfilUsuario {
+  justify-content: space-between; 
+  align-items: center ;
+  gap: 1em;
+}
+
+.divBotoesAtualizar {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 5%;
+  padding: 1%;
+  flex-direction: row;
+  width: 100%;
+}
+
+.container-form {
+  background-color: var(--cinza-claro);
+}
+
+
+/* .link-underline-transicao {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  margin: 1%;
+  cursor: pointer;
+  background:
+    linear-gradient(to right,
+      rgba(100, 200, 200, 1),
+      rgba(100, 200, 200, 1)),
+    linear-gradient(to right,
+      var(--nvClaroFundo),
+      var(--nvQuaseClaroFundo),
+      var(--nvEscuro));
+  background-size: 100% 3px, 0 3px;
+  background-position: 100% 100%, 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.link-underline-transicao:hover {
+  background-size: 0 3px, 100% 3px;
+} */
+
+/* Formulário */
+.container-formulario2 {
+  grid-area: main;
+  width: 70vh;
+  height: 70vh;
+  justify-self: center;
+  align-self: flex-start;
+  margin-top: 3vh;
+  border-radius: 20px;
+  box-shadow:
+    0.5px 0.9px 0.3px rgba(0, 0, 0, 0.053),
+    1.6px 2.9px 1.1px rgba(0, 0, 0, 0.077),
+    7px 13px 5px rgba(0, 0, 0, 0.13);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+input {
+  width: 30vh;
+  margin-top: 1vh;
+  margin-left: 2vh;
+  margin-right: 2vh;
+}
+
+button {
+  display: flex;
+}

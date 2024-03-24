@@ -1,0 +1,39 @@
+.Usuarios-ADM-aletra {
+  display: grid;
+  grid-template-columns: 100px 3fr 10%;
+  grid-template-rows: 75px 100vh;
+  grid-template-areas: "header-logo header-nome header-perfil"
+    "menu main main";
+}
+
+.BarraLogo {
+  position: absolute;
+}
+
+.txtValidar {
+  align-self: center;
+  align-items: center;
+  color: white;
+}
+
+.principalAlteraUsuario { 
+  grid-area: main;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5%;
+  justify-items: center;
+}
+
+.divBotoesAtualizar {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 5%;
+  padding: 1%;
+  flex-direction: row;
+  width: 100%;
+}
+
+.container-form{
+  background-color: var(--cinza-claro);
+}

@@ -1,0 +1,22 @@
+.tarefas-adm {
+    display: grid;
+    grid-template-columns: 100px 3fr 10%;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+.principal-tarefas-adm {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2%;
+}
+
+.gridTarefas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}

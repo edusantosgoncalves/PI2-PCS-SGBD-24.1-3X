@@ -1,0 +1,116 @@
+.container-descricao{
+    align-items: center;
+    gap: 10px;
+}
+
+.container-status-tarefa { 
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.container-nome-tarefa {
+    align-items: baseline;
+}
+
+#nome-tarefa{
+    font-size: 1rem;
+    width: 100vh;
+}
+
+.principalCriaTime{
+    justify-content: baseline;
+}
+
+.container-projetos-tarefas {
+    margin-top: 1%;
+}
+
+.radio-buttons {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    color: #b9b9b9;
+    font-family: "Euclid Circular A";
+  }
+  
+  .container-status-tarefa input {
+    display: none;
+  }
+  
+  .container-status-tarefa label {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px 10px 0;
+    cursor: pointer;
+  }
+  
+  .radio {
+    position: relative;
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #4a4a4a;
+  }
+  
+  .radio > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 65%;
+    height: 65%;
+    translate: -50% -50%;
+    scale: 0.5;
+    opacity: 0;
+    display: block;
+    background: var(--nvClaro);
+    border-radius: inherit;
+    transition: 0.5s;
+  }
+  
+  .container-status-tarefa input:checked ~ span {
+    border-color: var(--nvClaro);
+  }
+  
+  .container-status-tarefa input:checked ~ span > span {
+    scale: 1;
+    opacity: 1;
+  }
+  
+  @keyframes pulse {
+    50% {
+      opacity: 1;
+    }
+    100% {
+      scale: 1.3;
+      opacity: 0;
+    }
+  }
+  
+  .radio::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 140%;
+    translate: -50% -50%;
+    scale: 0.5;
+    opacity: 0;
+    border-radius: inherit;
+    border: 1px solid var(var(--nvClaro));
+  }
+  
+  .container-status-tarefa input:checked ~ .radio::before {
+    animation: pulse 0.75s;
+  }
+
+  .nome-acao {
+    font-size: 1.5rem;
+    color: var(--preto);
+    background-color: var(--nvClaroFundo);
+    padding: 1% 2% 0 2%;
+    border-top-left-radius: 0.8rem;
+    border-top-right-radius: 0.8rem;
+  }

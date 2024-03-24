@@ -1,0 +1,46 @@
+.detalhar-tarefa {
+    display: grid;
+    grid-template-columns: 100px 3fr 10%;
+    grid-template-rows: 75px 100vh;
+    grid-template-areas: "header-logo header-nome header-perfil"
+        "menu main main";
+}
+
+.badge-status {
+    border-radius: 50px;
+    background: linear-gradient(145deg, #000000, #000000);
+    box-shadow: 20px 20px 60px #000000,
+        -20px -20px 60px #000000;
+}
+
+.principal-detalha-tarefa {
+    grid-area: main;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2%;
+}
+
+.container-comentario-tarefa {
+    gap: 2%;
+}
+
+.text-field-comentario-tarefa {
+    padding: 0;
+}
+
+.botao-adicionar-comentario-tarefa {
+    margin: 1%;
+}
+
+.nao-clicavel {
+    pointer-events: none;
+    cursor: none;
+
+    text-decoration: none;
+    color: #000;
+    font-weight: 600;
+    margin: 1%;
+    background-color: transparent;
+}
