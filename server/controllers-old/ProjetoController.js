@@ -1,5 +1,5 @@
 // ! REQUIRE MODEL
-const Projeto = require('../models/Projeto.js');
+const Projeto = require('../models-old/Projeto.js');
 
 // * Cria a classe de CRUD de Times 
 module.exports = {

@@ -29,7 +29,18 @@ module.exports = (sequelize, DataTypes) => {
       cep_complemento: {
         type: DataTypes.STRING(255),
       },
-      status: { type: DataTypes.INTEGER },
+      status: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        /**
+         * 1 - Usuário novo (cadastro incompleto)
+         * 2 - Admin novo (cadastro incompleto)
+         * 3 - Usuário validado (cadastro completo)
+         * 4 - Admin validado (cadastro completo)
+         * !! 5 - Usuário inativo *NOVO
+         */
+      },
+
       dtInat: { type: DataTypes.DATE },
     },
     {

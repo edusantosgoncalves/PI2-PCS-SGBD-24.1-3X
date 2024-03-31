@@ -1,8 +1,8 @@
 // ! REQUIRE MODEL
-const Tarefa = require('../models/Tarefa.js');
+const Tarefa = require('../models-old/Tarefa.js');
 
 // * Importando as dependências do BD
-const { sql, poolPromise } = require('../database/db');
+const { sql, poolPromise } = require('../database/db.js');
 
 // * Cria a classe de CRUD de Projetos 
 module.exports = {

@@ -1,5 +1,5 @@
 // ! REQUIRE MODEL
-const Time = require('../models/Time.js');
+const Time = require('../models-old/Time.js');
 
 // * Cria a classe de CRUD de Times 
 module.exports = {

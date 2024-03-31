@@ -18,7 +18,6 @@ app.use(require("./routes/TimeRoutes"));
 app.use(require("./routes/UsuarioRoutes"));
 app.use(require("./routes/APIsRoutes"));
 
-module.exports = app;
 
 /* GOOGLE AUTH */
 //Importando o framework Express-Session e instanciando-o
@@ -33,10 +32,11 @@ app.use(
 
 //Importando o framework Passport
 const passport = require("passport");
-let userProfile;
-
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Variável para armazenar o perfil do usuário
+let userProfile;
 
 // Rota de erro - autenticação google
 app.get("/google/error", (req, res) => res.send("Erro ao logar"));
@@ -109,3 +109,6 @@ app.get(
     });
   }
 );
+
+
+module.exports = app;

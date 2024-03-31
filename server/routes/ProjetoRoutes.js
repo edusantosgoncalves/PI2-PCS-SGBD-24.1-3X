@@ -1,6 +1,6 @@
 // * Importando as bibliotecas
 const { Router } = require('express');
-const projetoController = require('../controllers/ProjetoController');
+const projetoController = require('../controllers-old/ProjetoController');
 const router = Router();
 
 // * Definindo as rotas do usuário

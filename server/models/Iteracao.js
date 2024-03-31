@@ -1,8 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  let Projeto = sequelize.define(
-    "Projeto",
+  let Iteracao = sequelize.define(
+    "Iteracao",
     {
-      // . No nosso modelo estava codProjeto, ajustar
+      // . No nosso modelo estava codIteracao, ajustar
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -21,9 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
+      // . No nosso modelo estava dtFim, ajustar
       dtConclusao: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       ativo: {
         type: DataTypes.BOOLEAN,
@@ -32,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "projeto",
+      tableName: "iteracao",
       schema: "3x",
     }
   );
 
-  return Projeto;
+  return Iteracao;
 };

@@ -1,6 +1,6 @@
 // * Importando as bibliotecas
 const { Router } = require('express');
-const TarefaController = require('../controllers/TarefaController');
+const TarefaController = require('../controllers-old/TarefaController');
 const router = Router();
 
 // * Definindo as rotas do usuário
