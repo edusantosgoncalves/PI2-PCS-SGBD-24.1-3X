@@ -2,9 +2,14 @@ module.exports = (sequelize, DataTypes) => {
   let Usuario = sequelize.define(
     "Usuario",
     {
+      idUsuario: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+      },
       email: {
         type: DataTypes.STRING(255),
-        primaryKey: true,
         allowNull: false,
       },
       nome: {
@@ -23,11 +28,14 @@ module.exports = (sequelize, DataTypes) => {
       cep: {
         type: DataTypes.STRING(8),
       },
-      cep_numEnd: {
-        type: DataTypes.INTEGER,
+      cepnumEndereco: {
+        type: DataTypes.STRING(50),
       },
-      cep_complemento: {
+      cepComplemento: {
         type: DataTypes.STRING(255),
+      },
+      urlImagem: {
+        type: DataTypes.TEXT,
       },
       status: {
         type: DataTypes.INTEGER,

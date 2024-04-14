@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Time",
     {
       // . No nosso modelo estava codTime, ajustar
-      id: {
+      idTime: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

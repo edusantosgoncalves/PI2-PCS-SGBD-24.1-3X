@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     "Comentario",
     {
       // . No nosso modelo estava codComentarios, ajustar
-      id: {
+      idComentario: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

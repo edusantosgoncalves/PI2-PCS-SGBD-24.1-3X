@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Tarefa",
     {
       // . No nosso modelo estava codTarefa, ajustar
-      id: {
+      idTarefa: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

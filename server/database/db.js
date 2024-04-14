@@ -52,157 +52,161 @@ db.Comentario = require("../models/Comentario")(sequelize, Sequelize.DataTypes);
 // . Usuario x Usuario (N x N - AvaliacaoUsuario)
 // * Relacoes 1 x N
 db.Usuario.hasMany(db.AvaliacaoUsuario, {
-  foreignKey: "usuarioAvaliadorEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuarioAvaliador",
+  sourceKey: "idUsuario",
 });
 
 db.Usuario.hasMany(db.AvaliacaoUsuario, {
-  foreignKey: "usuarioAvaliadoEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuarioAvaliado",
+  sourceKey: "idUsuario",
 });
 
 // * Relacoes N x 1
 db.AvaliacaoUsuario.belongsTo(db.Usuario, {
-  foreignKey: "usuarioAvaliadorEmail",
-  targetKey: "email",
+  foreignKey: "idUsuarioAvaliador",
+  targetKey: "idUsuario",
 });
 
 db.AvaliacaoUsuario.belongsTo(db.Usuario, {
-  foreignKey: "usuarioAvaliadoEmail",
-  targetKey: "email",
+  foreignKey: "idUsuarioAvaliado",
+  targetKey: "idUsuario",
 });
 
 // . Usuario x Usuario (N x N - UsuarioSegueUsuario)
 // * Relacoes 1 x N
 db.Usuario.hasMany(db.UsuarioSegueUsuario, {
-  foreignKey: "usuarioSeguidorEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuarioSeguidor",
+  sourceKey: "idUsuario",
 });
 
 db.Usuario.hasMany(db.UsuarioSegueUsuario, {
-  foreignKey: "usuarioSeguidoEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuarioSeguido",
+  sourceKey: "idUsuario",
 });
 
 // * Relacoes N x 1
 db.UsuarioSegueUsuario.belongsTo(db.Usuario, {
-  foreignKey: "usuarioSeguidorEmail",
-  targetKey: "email",
+  foreignKey: "idUsuarioSeguidor",
+  targetKey: "idUsuario",
 });
 
 db.UsuarioSegueUsuario.belongsTo(db.Usuario, {
-  foreignKey: "usuarioSeguidoEmail",
-  targetKey: "email",
+  foreignKey: "idUsuarioSeguido",
+  targetKey: "idUsuario",
 });
 
 // . Usuario x Time (N x N - UsuarioTime)
 // * Relacoes 1 x N
 db.Usuario.hasMany(db.UsuarioTime, {
-  foreignKey: "usuarioEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuario",
+  sourceKey: "idUsuario",
 });
 
 db.Time.hasMany(db.UsuarioTime, {
-  foreignKey: "timeId",
-  sourceKey: "id",
+  foreignKey: "idTime",
+  sourceKey: "idTime",
 });
 
 // * Relacoes N x 1
 db.UsuarioTime.belongsTo(db.Usuario, {
-  foreignKey: "usuarioEmail",
-  targetKey: "email",
+  foreignKey: "idUsuario",
+  targetKey: "idUsuario",
 });
 
 db.UsuarioTime.belongsTo(db.Time, {
-  foreignKey: "timeId",
-  targetKey: "id",
+  foreignKey: "idTime",
+  targetKey: "idTime",
 });
 
 // . Time x Projeto (1 x N)
 db.Time.hasMany(db.Projeto, {
-  foreignKey: "timeResponsavel",
-  sourceKey: "id",
+  foreignKey: "idTime",
+  sourceKey: "idTime",
 });
 db.Projeto.belongsTo(db.Time, {
-  foreignKey: "timeResponsavel",
-  targetKey: "id",
+  foreignKey: "idTime",
+  targetKey: "idTime",
 });
 
 // . Projeto x Iteracao (1 x N)
 db.Projeto.hasMany(db.Iteracao, {
-  foreignKey: "projetoId", // . No nosso modelo estava codProjetoFK, ajustar
-  sourceKey: "id",
+  foreignKey: "idProjeto", // . No nosso modelo estava codProjetoFK, ajustar
+  sourceKey: "idProjeto",
 });
 db.Iteracao.belongsTo(db.Projeto, {
-  foreignKey: "projetoId",
-  targetKey: "id",
+  foreignKey: "idProjeto",
+  targetKey: "idProjeto",
 });
 
 // . Iteracao x Tarefa (1 x N)
 db.Iteracao.hasMany(db.Tarefa, {
-  foreignKey: "iteracaoId", // . No nosso modelo estava codIteracaoFK, ajustar
-  sourceKey: "id",
+  foreignKey: "idIteracao", // . No nosso modelo estava codIteracaoFK, ajustar
+  sourceKey: "idIteracao",
 });
 db.Tarefa.belongsTo(db.Iteracao, {
-  foreignKey: "iteracaoId",
-  targetKey: "id",
+  foreignKey: "idIteracao",
+  targetKey: "idIteracao",
 });
 
 // . Usuario x Tarefa (1 x N)
 db.Usuario.hasMany(db.Tarefa, {
-  foreignKey: "usuarioResponsavel", // . No nosso modelo estava usuarioResp, ajustar
-  sourceKey: "email",
+  foreignKey: "idUsuario", // . No nosso modelo estava usuarioResp, ajustar
+  sourceKey: "idUsuario",
 });
 db.Tarefa.belongsTo(db.Usuario, {
-  foreignKey: "usuarioResponsavel",
-  targetKey: "email",
+  foreignKey: "idUsuario",
+  targetKey: "idUsuario",
 });
 
 // . Usuario x Tarefa (N x N - UsuarioSegueTarefa)
 // * Relacoes 1 x N
 db.Usuario.hasMany(db.UsuarioSegueTarefa, {
-  foreignKey: "usuarioSeguidorEmail",
-  sourceKey: "email",
+  foreignKey: "idUsuario",
+  sourceKey: "idUsuario",
 });
 
 db.Tarefa.hasMany(db.UsuarioSegueTarefa, {
-  foreignKey: "tarefaSeguida",
-  sourceKey: "id",
+  foreignKey: "idTarefa",
+  sourceKey: "idTarefa",
 });
 
 // * Relacoes N x 1
 db.UsuarioSegueTarefa.belongsTo(db.Usuario, {
-  foreignKey: "usuarioSeguidorEmail",
-  targetKey: "email",
+  foreignKey: "idUsuario",
+  targetKey: "idUsuario",
 });
 
 db.UsuarioSegueTarefa.belongsTo(db.Tarefa, {
-  foreignKey: "tarefaSeguida",
-  targetKey: "id",
+  foreignKey: "idTarefa",
+  targetKey: "idTarefa",
 });
 
 // . Tarefa x Comentario (1 x N)
 db.Tarefa.hasMany(db.Comentario, {
-  foreignKey: "tarefaId", // . No nosso modelo estava codTarefa, ajustar
-  sourceKey: "id",
+  foreignKey: "idTarefa", // . No nosso modelo estava codTarefa, ajustar
+  sourceKey: "idTarefa",
 });
 db.Comentario.belongsTo(db.Tarefa, {
-  foreignKey: "tarefaId",
-  targetKey: "id",
+  foreignKey: "idTarefa",
+  targetKey: "idTarefa",
 });
 
 // . Usuario x Comentario (1 x N) - !! NOVA NESTA VERSÃO
 db.Usuario.hasMany(db.Comentario, {
-  foreignKey: "usuarioResponsavel", // . No nosso modelo estava usuarioResp, ajustar
-  sourceKey: "email",
+  foreignKey: "idUsuario", // . No nosso modelo estava usuarioResp, ajustar
+  sourceKey: "idUsuario",
 });
 db.Comentario.belongsTo(db.Usuario, {
-  foreignKey: "usuarioResponsavel",
-  targetKey: "email",
+  foreignKey: "idUsuario",
+  targetKey: "idUsuario",
 });
 
+// ! AJUSTES NAS TABELAS
+db.Adjusts = require("./dbAdjusts");
+
 // ! VIEWS
-sequelize.query(/*`CREATE VIEW "TIMES_QTDPESS_QTDPROJ"
+db.Views = require("./dbViews");
+/*sequelize.query(`CREATE VIEW "TIMES_QTDPESS_QTDPROJ"
 AS
 SELECT ut2.codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess, count(p.codProjeto) as qtdProj
    FROM PROJETO p RIGHT JOIN
@@ -213,7 +217,34 @@ FROM
     ON t.codTime = ut.TIME_codTime
 GROUP BY t.codTime, t.nome, t.dtCriacao, t.ativo) AS ut2
 ON p.timeResponsavel = ut2.codTime
-GROUP BY ut2.codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess;`*/);
+GROUP BY ut2.codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess;`);*/
+
+// ! PROCEDURES
+/*sequelize.query(`
+CREATE OR REPLACE PROCEDURE getTimesUsuario(
+  IN Usuario VARCHAR(255)
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    ids_times INTEGER[];
+    team_data RECORD;
+BEGIN
+    -- Obtendo os ids dos times do usuario
+    SELECT ut."idTime" INTO ids_times FROM usuario_time ut JOIN TIME T
+    ON ut."idTime" = t.id
+     WHERE ut."usuarioEmail"=@Usuario
+     ORDER BY t.ativo desc;
+
+    IF array_length(ids_times, 1) IS NOT NULL THEN
+        -- Cria uma consulta dinâmica usando os IDs obtidos
+        EXECUTE 'SELECT * FROM TIMES_QTDPESS_QTDPROJ WHERE id = ANY($1)' USING ids_times;
+    ELSE
+        -- Se o array de IDs estiver vazio, retorna uma mensagem de erro
+        RAISE EXCEPTION 'Sem times para o usuário';
+    END IF;
+END;
+$$;`);*/
 
 // ! Exportando instancia do bd (sequelize) e o proprio sequelize (Sequelize)
 db.sequelize = sequelize;

@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   let AvaliacaoUsuario = sequelize.define(
     "AvaliacaoUsuario",
-    {},
+    { avaliacao: DataTypes.INTEGER, descricao: DataTypes.TEXT },
     {
       tableName: "avaliacao_usuario",
       schema: "3x",

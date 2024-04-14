@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Projeto",
     {
       // . No nosso modelo estava codProjeto, ajustar
-      id: {
+      idProjeto: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

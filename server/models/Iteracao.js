@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Iteracao",
     {
       // . No nosso modelo estava codIteracao, ajustar
-      id: {
+      idIteracao: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -19,16 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       // . No nosso modelo estava dtCriacao, ajustar
       dtInicio: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       // . No nosso modelo estava dtFim, ajustar
       dtConclusao: {
         type: DataTypes.DATE,
-      },
-      ativo: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: true,
       },
     },
     {
