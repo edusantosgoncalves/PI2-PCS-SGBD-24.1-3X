@@ -11,11 +11,11 @@ async function Adjusts(sequelize) {
   }
 
   // . Removendo coluna de id criada automaticamente pelo Sequelize
-  try {
+  /*try {
     await sequelize.query(`ALTER TABLE "3x".usuario_time DROP COLUMN id;`);
   } catch (e) {
     console.log(e);
-  }
+  }*/
 
   // . Adicionando nova associacao de chave primaria
   try {
@@ -35,13 +35,13 @@ async function Adjusts(sequelize) {
     console.log(e);
   }
 
-  try {
+  /*try {
     await sequelize.query(
       `ALTER TABLE "3x".usuario_segue_usuario DROP COLUMN id;`
     );
   } catch (e) {
     console.log(e);
-  }
+  }*/
 
   try {
     await sequelize.query(
@@ -60,11 +60,11 @@ async function Adjusts(sequelize) {
     console.log(e);
   }
 
-  try {
+  /*try {
     await sequelize.query(`ALTER TABLE "3x".avaliacao_usuario DROP COLUMN id;`);
   } catch (e) {
     console.log(e);
-  }
+  }*/
 
   try {
     await sequelize.query(
@@ -83,13 +83,13 @@ async function Adjusts(sequelize) {
     console.log(e);
   }
 
-  try {
+  /* try {
     await sequelize.query(
       `ALTER TABLE "3x".usuario_segue_tarefa DROP COLUMN id;`
     );
   } catch (e) {
     console.log(e);
-  }
+  }*/
 
   try {
     await sequelize.query(

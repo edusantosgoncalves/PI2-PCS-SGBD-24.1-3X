@@ -4,16 +4,18 @@ async function Views(sequelize) {
   try {
     await sequelize.query(
       `CREATE OR REPLACE VIEW "3x".TIMES_QTDPESS_QTDPROJ
-        AS
-        SELECT ut2."idTime" as codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess, count(p."idProjeto") as qtdProj
-           FROM "3x".PROJETO p RIGHT JOIN
-            (SELECT
-            t."idTime", t.nome, t."createdAt" as dtCriacao, t.ativo, count(ut."idUsuario") as qtdPess
-            FROM "3x".TIME t LEFT JOIN "3x".USUARIO_TIME ut
-                ON t."idTime" = ut."idTime"
-            GROUP BY t."idTime", t.nome, t."createdAt", t.ativo) AS ut2
-        ON p."idTime" = ut2."idTime"
-        GROUP BY ut2."idTime", ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess;`
+      AS
+      SELECT ut2."idTime" as "codTime", ut2.nome,
+             ut2."dtcriacao" as "dtCriacao", ut2.ativo,
+             ut2.qtdPess as "qtdPess", count(p."idProjeto") as "qtdProj"
+         FROM "3x".PROJETO p RIGHT JOIN
+          (SELECT
+          t."idTime", t.nome, t."createdAt" as dtCriacao, t.ativo, count(ut."idUsuario") as qtdPess
+          FROM "3x".TIME t LEFT JOIN "3x".USUARIO_TIME ut
+              ON t."idTime" = ut."idTime"
+          GROUP BY t."idTime", t.nome, t."createdAt", t.ativo) AS ut2
+      ON p."idTime" = ut2."idTime"
+      GROUP BY ut2."idTime", ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess;`
     );
   } catch (e) {
     console.log(e);

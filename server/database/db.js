@@ -54,22 +54,26 @@ db.Comentario = require("../models/Comentario")(sequelize, Sequelize.DataTypes);
 db.Usuario.hasMany(db.AvaliacaoUsuario, {
   foreignKey: "idUsuarioAvaliador",
   sourceKey: "idUsuario",
+  as: "Avaliador",
 });
 
 db.Usuario.hasMany(db.AvaliacaoUsuario, {
   foreignKey: "idUsuarioAvaliado",
   sourceKey: "idUsuario",
+  as: "Avaliado",
 });
 
 // * Relacoes N x 1
 db.AvaliacaoUsuario.belongsTo(db.Usuario, {
   foreignKey: "idUsuarioAvaliador",
   targetKey: "idUsuario",
+  as: "Avaliador",
 });
 
 db.AvaliacaoUsuario.belongsTo(db.Usuario, {
   foreignKey: "idUsuarioAvaliado",
   targetKey: "idUsuario",
+  as: "Avaliado",
 });
 
 // . Usuario x Usuario (N x N - UsuarioSegueUsuario)
@@ -77,11 +81,13 @@ db.AvaliacaoUsuario.belongsTo(db.Usuario, {
 db.Usuario.hasMany(db.UsuarioSegueUsuario, {
   foreignKey: "idUsuarioSeguidor",
   sourceKey: "idUsuario",
+  as: "Seguidor",
 });
 
 db.Usuario.hasMany(db.UsuarioSegueUsuario, {
   foreignKey: "idUsuarioSeguido",
   sourceKey: "idUsuario",
+  as: "Seguido",
 });
 
 // * Relacoes N x 1

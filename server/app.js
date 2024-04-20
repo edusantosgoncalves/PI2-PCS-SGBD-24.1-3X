@@ -12,12 +12,15 @@ app.set("port", process.env.PORT || 1003);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(require("./routes/ProjetoRoutes"));
-app.use(require("./routes/TarefaRoutes"));
-app.use(require("./routes/TimeRoutes"));
+// * Importando as rotas novas
 app.use(require("./routes/UsuarioRoutes"));
-app.use(require("./routes/APIsRoutes"));
 
+// * Importando as rotas antigas
+/*app.use(require("./routes-old/ProjetoRoutes"));
+app.use(require("./routes-old/TarefaRoutes"));
+app.use(require("./routes-old/TimeRoutes"));
+app.use(require("./routes-old/UsuarioRoutes"));
+app.use(require("./routes-old/APIsRoutes"));*/
 
 /* GOOGLE AUTH */
 //Importando o framework Express-Session e instanciando-o
@@ -109,6 +112,5 @@ app.get(
     });
   }
 );
-
 
 module.exports = app;
