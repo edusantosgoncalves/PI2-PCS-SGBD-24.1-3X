@@ -26,14 +26,6 @@ const sequelize = new Sequelize(
 
 // ! Modelos
 db.Usuario = require("../models/Usuario")(sequelize, Sequelize.DataTypes);
-db.UsuarioSegueUsuario = require("../models/UsuarioSegueUsuario")(
-  sequelize,
-  Sequelize.DataTypes
-);
-db.AvaliacaoUsuario = require("../models/AvaliacaoUsuario")(
-  sequelize,
-  Sequelize.DataTypes
-);
 db.Time = require("../models/Time")(sequelize, Sequelize.DataTypes);
 db.UsuarioTime = require("../models/UsuarioTime")(
   sequelize,
@@ -42,65 +34,9 @@ db.UsuarioTime = require("../models/UsuarioTime")(
 db.Projeto = require("../models/Projeto")(sequelize, Sequelize.DataTypes);
 db.Iteracao = require("../models/Iteracao")(sequelize, Sequelize.DataTypes);
 db.Tarefa = require("../models/Tarefa")(sequelize, Sequelize.DataTypes);
-db.UsuarioSegueTarefa = require("../models/UsuarioSegueTarefa")(
-  sequelize,
-  Sequelize.DataTypes
-);
 db.Comentario = require("../models/Comentario")(sequelize, Sequelize.DataTypes);
 
 // ! Relacionamentos
-// . Usuario x Usuario (N x N - AvaliacaoUsuario)
-// * Relacoes 1 x N
-db.Usuario.hasMany(db.AvaliacaoUsuario, {
-  foreignKey: "idUsuarioAvaliador",
-  sourceKey: "idUsuario",
-  as: "Avaliador",
-});
-
-db.Usuario.hasMany(db.AvaliacaoUsuario, {
-  foreignKey: "idUsuarioAvaliado",
-  sourceKey: "idUsuario",
-  as: "Avaliado",
-});
-
-// * Relacoes N x 1
-db.AvaliacaoUsuario.belongsTo(db.Usuario, {
-  foreignKey: "idUsuarioAvaliador",
-  targetKey: "idUsuario",
-  as: "Avaliador",
-});
-
-db.AvaliacaoUsuario.belongsTo(db.Usuario, {
-  foreignKey: "idUsuarioAvaliado",
-  targetKey: "idUsuario",
-  as: "Avaliado",
-});
-
-// . Usuario x Usuario (N x N - UsuarioSegueUsuario)
-// * Relacoes 1 x N
-db.Usuario.hasMany(db.UsuarioSegueUsuario, {
-  foreignKey: "idUsuarioSeguidor",
-  sourceKey: "idUsuario",
-  as: "Seguidor",
-});
-
-db.Usuario.hasMany(db.UsuarioSegueUsuario, {
-  foreignKey: "idUsuarioSeguido",
-  sourceKey: "idUsuario",
-  as: "Seguido",
-});
-
-// * Relacoes N x 1
-db.UsuarioSegueUsuario.belongsTo(db.Usuario, {
-  foreignKey: "idUsuarioSeguidor",
-  targetKey: "idUsuario",
-});
-
-db.UsuarioSegueUsuario.belongsTo(db.Usuario, {
-  foreignKey: "idUsuarioSeguido",
-  targetKey: "idUsuario",
-});
-
 // . Usuario x Time (N x N - UsuarioTime)
 // * Relacoes 1 x N
 db.Usuario.hasMany(db.UsuarioTime, {
@@ -164,29 +100,6 @@ db.Tarefa.belongsTo(db.Usuario, {
   targetKey: "idUsuario",
 });
 
-// . Usuario x Tarefa (N x N - UsuarioSegueTarefa)
-// * Relacoes 1 x N
-db.Usuario.hasMany(db.UsuarioSegueTarefa, {
-  foreignKey: "idUsuario",
-  sourceKey: "idUsuario",
-});
-
-db.Tarefa.hasMany(db.UsuarioSegueTarefa, {
-  foreignKey: "idTarefa",
-  sourceKey: "idTarefa",
-});
-
-// * Relacoes N x 1
-db.UsuarioSegueTarefa.belongsTo(db.Usuario, {
-  foreignKey: "idUsuario",
-  targetKey: "idUsuario",
-});
-
-db.UsuarioSegueTarefa.belongsTo(db.Tarefa, {
-  foreignKey: "idTarefa",
-  targetKey: "idTarefa",
-});
-
 // . Tarefa x Comentario (1 x N)
 db.Tarefa.hasMany(db.Comentario, {
   foreignKey: "idTarefa", // . No nosso modelo estava codTarefa, ajustar
@@ -212,45 +125,9 @@ db.Adjusts = require("./dbAdjusts");
 
 // ! VIEWS
 db.Views = require("./dbViews");
-/*sequelize.query(`CREATE VIEW "TIMES_QTDPESS_QTDPROJ"
-AS
-SELECT ut2.codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess, count(p.codProjeto) as qtdProj
-   FROM PROJETO p RIGHT JOIN
-    (SELECT
-    t.codTime, t.nome, t.dtCriacao, t.ativo, count(ut.USUARIO_email) as qtdPess
-FROM
-    dbo.TIME t LEFT JOIN dbo.USUARIO_TIME ut
-    ON t.codTime = ut.TIME_codTime
-GROUP BY t.codTime, t.nome, t.dtCriacao, t.ativo) AS ut2
-ON p.timeResponsavel = ut2.codTime
-GROUP BY ut2.codTime, ut2.nome, ut2.dtCriacao, ut2.ativo, ut2.qtdPess;`);*/
 
 // ! PROCEDURES
-/*sequelize.query(`
-CREATE OR REPLACE PROCEDURE getTimesUsuario(
-  IN Usuario VARCHAR(255)
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    ids_times INTEGER[];
-    team_data RECORD;
-BEGIN
-    -- Obtendo os ids dos times do usuario
-    SELECT ut."idTime" INTO ids_times FROM usuario_time ut JOIN TIME T
-    ON ut."idTime" = t.id
-     WHERE ut."usuarioEmail"=@Usuario
-     ORDER BY t.ativo desc;
-
-    IF array_length(ids_times, 1) IS NOT NULL THEN
-        -- Cria uma consulta dinâmica usando os IDs obtidos
-        EXECUTE 'SELECT * FROM TIMES_QTDPESS_QTDPROJ WHERE id = ANY($1)' USING ids_times;
-    ELSE
-        -- Se o array de IDs estiver vazio, retorna uma mensagem de erro
-        RAISE EXCEPTION 'Sem times para o usuário';
-    END IF;
-END;
-$$;`);*/
+db.Functions = require("./dbFunctions");
 
 // ! Exportando instancia do bd (sequelize) e o proprio sequelize (Sequelize)
 db.sequelize = sequelize;

@@ -4,6 +4,8 @@ const UsuarioController = require("../controller/Usuario");
 const router = Router();
 
 // ! Definindo as rotas do usuário
+router.put("/api/usuarios/:email/valida", UsuarioController.userLogin); // Cadastra um usuário
+router.get("/api/usuarios/:email", UsuarioController.getUserByEmail); // Retorna um usuário específico
 router.get("/api/usuarios/:email/times", UsuarioController.getUsersTimes); // Retorna os times de um usuário específico
 router.get(
   "/api/usuarios/:email/seguidos",

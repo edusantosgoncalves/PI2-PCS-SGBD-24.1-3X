@@ -137,7 +137,7 @@ module.exports = {
     }
   },
 
-  // * Verifica se a tarefa é seguida pelo usuario recebido
+  // * Verifica se a tarefa é seguida pelo usuario recebido -- 4J
   async isTarefaSeguidaPorUsuario(codTarefa, emailUsuario) {
     try {
       let pool = await poolPromise;
@@ -213,7 +213,7 @@ module.exports = {
     }
   },
 
-  // * Busca a lista de usuários que devem receber um e-mail sobre a alteração de uma tarefa:
+  // * Busca a lista de usuários que devem receber um e-mail sobre a alteração de uma tarefa: -- 4J
   async getListaUsuariosGatilho(
     codTarefa,
     emailUsuario,

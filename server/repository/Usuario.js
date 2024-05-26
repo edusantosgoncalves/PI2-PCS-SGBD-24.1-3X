@@ -1,24 +1,38 @@
 const sequelize = require("../database/db").sequelize;
 const { Op, literal } = require("sequelize");
 const {
-  AvaliacaoUsuario: AvaliacaoUsuarioModel,
-  UsuarioSegueUsuario: UsuarioSegueUsuarioModel,
-  UsuarioSegueTarefa: UsuarioSegueTarefaModel,
   UsuarioTime: UsuarioTimeModel,
   Usuario: UsuarioModel,
 } = require("../database/db");
 
-const basicFields = []; //= ["id", "name", "email", "status"];
+const basicFields = [
+  "cep",
+  "cepComplemento",
+  "cepnumEndereco",
+  "dtInat",
+  "email",
+  "funcao",
+  "github",
+  ["idUsuario", "codUsuario"],
+  "linkedin",
+  "nome",
+  "status",
+  "urlImagem",
+];
 
 class UsuarioRepository {
+  // Validado
   static async get() {
     return await UsuarioModel.findAll({
+      attributes: basicFields,
       raw: true,
     });
   }
 
+  // Validado
   static async getAtivos() {
     return await UsuarioModel.findAll({
+      attributes: basicFields,
       where: {
         status: { [Op.between]: [1, 4] },
       },
@@ -26,8 +40,10 @@ class UsuarioRepository {
     });
   }
 
+  // Validado
   static async getUserByEmail(email) {
     return await UsuarioModel.findOne({
+      attributes: basicFields,
       where: {
         email: email,
       },
@@ -35,6 +51,7 @@ class UsuarioRepository {
     });
   }
 
+  // Validado
   static async getUserIdByEmailForActiveUser(email) {
     return await UsuarioModel.findOne({
       attributes: ["idUsuario"],
@@ -46,8 +63,11 @@ class UsuarioRepository {
     });
   }
 
+  // Validado
   static async alteraStatus(email, status) {
-    const user = await UsuarioModel.findOne({ where: { email: email } });
+    const user = await UsuarioModel.findOne({
+      where: { email: email },
+    });
 
     if (!user) {
       return false;
@@ -59,6 +79,7 @@ class UsuarioRepository {
     return true;
   }
 
+  // Validado
   static async updateUser(
     email,
     nome,
@@ -87,10 +108,11 @@ class UsuarioRepository {
     return true;
   }
 
+  // Validado
   static async userLogin(email, nome, urlImagem) {
     let user = await UsuarioModel.findOne({ where: { email: email } });
 
-    if (!user) return null;
+    if (!user) return false;
 
     user.nome = nome;
     user.urlImagem = urlImagem;
@@ -99,20 +121,24 @@ class UsuarioRepository {
     return user;
   }
 
+  // Validado
   static async addUser(email, nome, status) {
     let user = await UsuarioModel.findOne({ where: { email: email } });
 
-    if (!user) return false; // Usuário já cadastrado
+    if (user) return false; // Usuário já cadastrado
 
     user = await UsuarioModel.create({
       email: email,
       nome: nome,
       status: status,
+    }).then((usuario) => {
+      return usuario.get({ plain: true });
     });
 
     return user;
   }
 
+  // Validado
   static async deleteUser(email) {
     const user = await UsuarioModel.findOne({ where: { email: email } });
 
@@ -125,6 +151,7 @@ class UsuarioRepository {
     return true;
   }
 
+  // Validado
   static async updateUserAdmin(email, emailNovo, funcao, status) {
     const user = await UsuarioModel.findOne({ where: { email: email } });
 
@@ -140,21 +167,23 @@ class UsuarioRepository {
     return true;
   }
 
-  static async addUserTeam(email, time) {
-    let user = await UsuarioTimeModel.findOne({
-      where: { usuarioEmail: email, timeId: time },
+  // Validado
+  static async addUserTeam(idUsuario, idTime) {
+    let userTimeModel = await UsuarioTimeModel.findOne({
+      where: { idUsuario: idUsuario, idTime: idTime },
     });
 
-    if (!user) return false; // Usuário já cadastrado no time
+    if (userTimeModel) return false; // Usuário já cadastrado no time
 
     await UsuarioTimeModel.create({
-      usuarioEmail: email,
-      timeId: time,
+      idUsuario: idUsuario,
+      idTime: idTime,
     });
 
     return true;
   }
 
+  // Validado
   static async getUsersTimes(id) {
     const query = await sequelize.query(
       `select * from "3x".gettimesusuario(${id})`
@@ -163,41 +192,7 @@ class UsuarioRepository {
     return query[0];
   }
 
-  static async seguirTarefa(id, tarefa) {
-    const user = await UsuarioSegueTarefaModel.findOne({
-      where: { idUsuario: id, idTarefa: tarefa },
-    });
-
-    if (!user) return false; // Usuário já segue a tarefa
-
-    await UsuarioSegueTarefaModel.create({
-      idUsuario: id,
-      idTarefa: tarefa,
-    });
-
-    return true;
-  }
-
-  static async pararDeSeguirTarefa(id, tarefa) {
-    const user = await UsuarioSegueTarefaModel.findOne({
-      where: { idUsuario: id, idTarefa: tarefa },
-    });
-
-    if (!user) return false; // Usuário não segue a tarefa
-
-    await user.destroy();
-
-    return true;
-  }
-
-  static async getTarefasSeguidasUsuario(id) {
-    const query = await sequelize.query(
-      `select * from "3x".getTarefasSeguidasUsuario(${id})`
-    );
-
-    return query[0];
-  }
-
+  // Validado
   static async getProjetosUsuario(id) {
     let queryString;
     // id === -1 (todos os projetos)
@@ -212,94 +207,7 @@ class UsuarioRepository {
     return query[0];
   }
 
-  static async seguirUsuario(id, idSeguido) {
-    const user = await UsuarioSegueUsuarioModel.findOne({
-      where: { idUsuarioSeguidor: id, idUsuarioSeguido: idSeguido },
-    });
-
-    if (!user) return false; // Usuário já segue o usuário
-
-    await UsuarioSegueUsuarioModel.create({
-      idUsuario: id,
-      idUsuarioSeguido: idSeguido,
-    });
-
-    return true;
-  }
-
-  static async pararDeSeguirUsuario(id, idSeguido) {
-    const user = await UsuarioSegueUsuarioModel.findOne({
-      where: { idUsuarioSeguidor: id, idUsuarioSeguido: idSeguido },
-    });
-
-    if (!user) return false; // Usuário não segue o usuário
-
-    await user.destroy();
-
-    return true;
-  }
-
-  static async isUsuarioSeguidoPorUsuario(id, idSeguido) {
-    const user = await UsuarioSegueUsuarioModel.findOne({
-      where: { idUsuarioSeguidor: id, idUsuarioSeguido: idSeguido },
-    });
-
-    return user ? true : false;
-  }
-
-  static async getUsuariosSeguidos(id) {
-    const users = await UsuarioSegueUsuarioModel.findAll({
-      attributes: ["idUsuarioSeguido"],
-      where: { idUsuarioSeguidor: id },
-      include: {
-        model: UsuarioModel,
-        attributes: ["nome", "urlImagem"],
-      },
-      raw: true,
-    });
-
-    return users;
-  }
-
-  static async getAvaliacoesParaUsuario(id) {
-    const users = await AvaliacaoUsuarioModel.findAll({
-      where: { idUsuarioAvaliado: id },
-      include: {
-        model: UsuarioModel,
-        as: "Avaliador",
-        attributes: ["nome", "urlImagem"],
-      },
-      raw: true,
-    });
-
-    return users;
-  }
-
-  static async getAvaliacoesDeUsuario(id) {
-    const users = await AvaliacaoUsuarioModel.findAll({
-      where: { idUsuarioAvaliador: id },
-      include: {
-        model: UsuarioModel,
-        as: "Avaliado",
-        attributes: ["nome", "urlImagem"],
-      },
-      raw: true,
-    });
-
-    return users;
-  }
-
-  async avaliarUsuario(id, idAvaliado, avaliacao, descricao) {
-    await AvaliacaoUsuarioModel.create({
-      idUsuarioAvaliador: id,
-      idUsuarioAvaliado: idAvaliado,
-      avaliacao: avaliacao,
-      descricao: descricao,
-    });
-
-    return true;
-  }
-
+  // Validado
   static async getDashboard(id, admin) {
     let query;
     if (admin === true) {

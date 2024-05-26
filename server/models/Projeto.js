@@ -19,11 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       // . No nosso modelo estava dtCriacao, ajustar
       dtInicio: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       dtConclusao: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       ativo: {
         type: DataTypes.BOOLEAN,

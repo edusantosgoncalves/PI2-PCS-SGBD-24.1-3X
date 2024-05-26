@@ -68,10 +68,19 @@ async function Views(sequelize) {
   // * VIEW PARA A PÁGINA DE PROJETOS
   try {
     await sequelize.query(
-      `CREATE OR REPLACE VIEW "3x".PROJETOSView
-      as
+      `CREATE OR REPLACE VIEW "3x".PROJETOSView AS
       SELECT TI.codProjeto, TI.nome, TO_CHAR(TI."dtInicio", 'DD/MM/YYYY') as dtCriacao, TI."idTime" as timeResponsavel, TI.nomeTime,
-             TI.ativo,TO_CHAR(TI."dtConclusao", 'DD/MM/YYYY') as dtConclusao, TO_CHAR(TI.Prazo, 'DD/MM/YYYY')as Prazo, count(TII."idTarefa") as qtdTarefas
+             TI.ativo,TO_CHAR(TI."dtConclusao", 'DD/MM/YYYY') as dtConclusao, TO_CHAR(TI.Prazo, 'DD/MM/YYYY')as Prazo,
+             coalesce((SELECT count(*) as qtdTarefas from "3x".TAREFA T2
+                   LEFT JOIN "3x".ITERACAO i
+                       on T2."idIteracao" = i."idIteracao"
+                    WHERE i."idProjeto" = TI.codProjeto), 0) as qtdTarefas,
+              /* count(TIII."idTarefa") as*/
+          coalesce((SELECT count(*) as qtdTarefasAtivas from "3x".TAREFA T3
+                   LEFT JOIN "3x".ITERACAO i2
+                       on T3."idIteracao" = i2."idIteracao"
+                   WHERE i2."idProjeto" = TI.codProjeto and T3.status = 1
+                   group by i2."idProjeto"), 0) as qtdTarefasAtivas
       FROM
           (SELECT p."idProjeto" as codProjeto, p.nome, p."dtInicio", p."idTime", time.nome AS nomeTime,
              p.ativo, p."dtConclusao", MAX (I."dtConclusao") AS Prazo
@@ -79,14 +88,21 @@ async function Views(sequelize) {
       ON p."idTime" = time."idTime"
           LEFT JOIN "3x".ITERACAO I on p."idProjeto" = I."idProjeto"
                  GROUP BY p."idProjeto", p.nome, p."dtInicio", p."idTime", time.nome,
-             p.ativo, p."dtConclusao") TI
-              LEFT JOIN
-              (SELECT t2.*, i."idProjeto" from "3x".TAREFA T2
-                   LEFT JOIN "3x".ITERACAO i
-                       on T2."idIteracao" = i."idIteracao") TII
-           ON ti.codProjeto = TII."idProjeto"
-      GROUP BY TI.codProjeto, TI.nome, TI."dtInicio", TI."idTime", TI.nomeTime,
-             TI.ativo, TI."dtConclusao", TI.Prazo;`
+             p.ativo, p."dtConclusao") TI;`
+    );
+  } catch (e) {
+    console.log(e);
+  }
+
+  // * VIEW PARA USUARIOS X PROJETOS
+  try {
+    await sequelize.query(
+      `CREATE OR REPLACE VIEW "3x".USUARIOS_PROJETOS AS
+      SELECT p."idProjeto" AS "codProjeto", u."idUsuario", u.email, u.nome
+      FROM
+          "3x".PROJETO p
+          LEFT JOIN "3x".USUARIO_TIME ut ON p."idTime" = ut."idTime"
+          LEFT JOIN "3x".usuario u ON ut."idUsuario" = u."idUsuario";`
     );
   } catch (e) {
     console.log(e);

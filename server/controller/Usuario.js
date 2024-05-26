@@ -42,4 +42,33 @@ module.exports = {
     const avaliacoes = await UsuarioService.getAvaliacoesDeUsuario(email);
     return res.json(avaliacoes);
   },
+
+  async userLogin(req, res) {
+    const { email } = req.params;
+    const { nome, urlImagem } = req.body;
+
+    const user = await UsuarioService.userLogin(email, nome, urlImagem);
+
+    switch (user) {
+      case false:
+        return res.status(404).json();
+      case -1:
+        return res.status(500).json();
+      default:
+        return res.status(201).json(user);
+    }
+  },
+
+  async getUserByEmail(req, res) {
+    const { email } = req.params;
+
+    const user = await UsuarioService.getUserByEmail(email);
+
+    switch (user) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(user);
+    }
+  },
 };
