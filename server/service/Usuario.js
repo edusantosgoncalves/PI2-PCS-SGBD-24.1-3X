@@ -1,6 +1,20 @@
-const UsuarioRepository = require("../repository/Usuario");
+const UsuarioRepository = require("../repository/Usuario"); // Repositorio do Usuario
+const Usuario4JRepository = require("../repository/Usuario4J"); // Repositorio das relações Usuario x Usuario (Avaliacao e Segue)
+const Tarefa4JRepository = require("../repository/Tarefa4J"); // Repositorio das relações Usuario x Tarefa (Seguir)
+const TarefaRepository = require("../repository/Tarefa"); // Repositorio da Tarefa
 
 class UsuarioService {
+  static getUserIdError(errorCode) {
+    switch (errorCode) {
+      case -1:
+        return { mensagem: "Erro ao buscar usuário no banco de dados" };
+      case -2:
+        return { mensagem: "Usuário inativo ou inexistente" };
+      default:
+        return { mensagem: "Erro desconhecido" };
+    }
+  }
+
   static async get() {
     return await UsuarioRepository.get();
   }
@@ -64,8 +78,12 @@ class UsuarioService {
     }
   }
 
-  static async addUser(email) {
-    return await UsuarioRepository.addUser(email);
+  static async addUser(email, nome, status) {
+    const usuario = await UsuarioRepository.addUser(email, nome, status);
+
+    // !! ENVIAR E-MAIL
+
+    return usuario;
   }
 
   static async deleteUser(email) {
@@ -73,7 +91,11 @@ class UsuarioService {
   }
 
   static async addUserTeam(email, idTime) {
-    return await UsuarioRepository.addUserTeam(email, idTime);
+    const userId = await UsuarioService.getUserIdByEmailForActiveUser(email);
+
+    if (userId < 0) return userId;
+
+    return await UsuarioRepository.addUserTeam(userId, idTime);
   }
 
   static async getUsersTimes(email) {
@@ -95,7 +117,7 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    return await UsuarioRepository.pararDeSeguirTarefa(userId, idTarefa);
+    return await Tarefa4JRepository.pararDeSeguirTarefa(userId, idTarefa);
   }
 
   static async getTarefasSeguidasUsuario(email) {
@@ -103,7 +125,15 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    return await UsuarioRepository.getTarefasSeguidasUsuario(userId);
+    const tasks = await Tarefa4JRepository.getTarefasSeguidasUsuario(userId);
+
+    for (let i = 0; i < tasks.length; i++) {
+      const taskData = await TarefaRepository.getTarefaById(tasks[i]);
+
+      tasks[i] = taskData;
+    }
+
+    return tasks; //await UsuarioRepository.getTarefasSeguidasUsuario(userId);
   }
 
   static async getProjetosUsuario(email) {
@@ -119,12 +149,12 @@ class UsuarioService {
     return await UsuarioRepository.getProjetosUsuario(userId);
   }
 
-  static async seguirUsuario(email, emailSeguido) {
+  static async seguirUsuario(email, emailSeguir) {
     const userSeguidorId = await UsuarioService.getUserIdByEmailForActiveUser(
       email
     );
     const userSeguidoId = await UsuarioService.getUserIdByEmailForActiveUser(
-      emailSeguido
+      emailSeguir
     );
 
     if (userSeguidorId < 0) return userSeguidorId;
@@ -163,7 +193,7 @@ class UsuarioService {
     if (userSeguidorId < 0) return userSeguidorId;
     if (userSeguidoId < 0) return userSeguidoId;
 
-    return await UsuarioRepository.isUsuarioSeguidoPorUsuario(
+    return await Usuario4JRepository.isUsuarioSeguidoPorUsuario(
       userSeguidorId,
       userSeguidoId
     );
@@ -174,14 +204,14 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    const users = await UsuarioRepository.getUsuariosSeguidos(userId);
+    const users = await Usuario4JRepository.getUsuariosSeguidos(userId);
 
     for (let i = 0; i < users.length; i++) {
-      users[i] = {
-        nome: users[i]["Usuario.nome"],
-        email: users[i]["Usuario.email"],
-        urlImagem: users[i]["Usuario.urlImagem"],
-      };
+      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+        users[i]
+      );
+
+      users[i] = userData;
     }
 
     return users;
@@ -192,14 +222,18 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    const users = await UsuarioRepository.getAvaliacoesParaUsuario(userId);
+    let users = await Usuario4JRepository.getAvaliacoesRecebidasUsuario(userId);
 
     for (let i = 0; i < users.length; i++) {
+      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+        users[i].usuario
+      );
+
       users[i] = {
-        avaliacao: users[i]["avaliacao"],
-        descricao: users[i]["descricao"],
-        nome: users[i]["Avaliador.nome"],
-        urlImagem: users[i]["Avaliador.urlImagem"],
+        avaliacao: users[i].avaliacao,
+        descricao: users[i].descricao,
+        nome: userData.nome,
+        urlImagem: userData.urlImagem,
       };
     }
 
@@ -211,15 +245,18 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    const users = await UsuarioRepository.getAvaliacoesDeUsuario(userId);
+    const users = await Usuario4JRepository.getAvaliacoesFeitasUsuario(userId);
 
     for (let i = 0; i < users.length; i++) {
-      console.log(users[i]);
+      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+        users[i].usuario
+      );
+
       users[i] = {
-        avaliacao: users[i]["avaliacao"],
-        descricao: users[i]["descricao"],
-        nome: users[i]["Avaliado.nome"],
-        urlImagem: users[i]["Avaliado.urlImagem"],
+        avaliacao: users[i].avaliacao,
+        descricao: users[i].descricao,
+        nome: userData.nome,
+        urlImagem: userData.urlImagem,
       };
     }
 
@@ -254,7 +291,18 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    return await UsuarioRepository.getDashboard(userId, admin);
+    const adminBool = admin === "1";
+
+    return await UsuarioRepository.getDashboard(userId, adminBool);
+  }
+
+  static async updateUserAdmin(email, emailNovo, funcao, status) {
+    return await UsuarioRepository.updateUserAdmin(
+      email,
+      emailNovo,
+      funcao,
+      status
+    );
   }
 }
 

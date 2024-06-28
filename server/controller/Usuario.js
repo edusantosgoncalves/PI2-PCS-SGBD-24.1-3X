@@ -1,6 +1,16 @@
 const UsuarioService = require("../service/Usuario");
 
 module.exports = {
+  async getUsuarios(req, res) {
+    const usuarios = await UsuarioService.get();
+    return res.json(usuarios);
+  },
+
+  async getAtivos(req, res) {
+    const usuarios = await UsuarioService.getAtivos();
+    return res.json(usuarios);
+  },
+
   async getUsersTimes(req, res) {
     const { email } = req.params;
 
@@ -19,6 +29,14 @@ module.exports = {
     const { email } = req.params;
 
     const projetos = await UsuarioService.getProjetosUsuario(email);
+
+    if (!isNaN(projetos)) {
+      const result = UsuarioService.getUserIdError(projetos);
+
+      if (projetos === -1) return res.status(500).json(result);
+      else if (projetos === -2) return res.status(404).json(result);
+      else return res.status(400).json(result);
+    }
     return res.json(projetos);
   },
 
@@ -64,11 +82,191 @@ module.exports = {
 
     const user = await UsuarioService.getUserByEmail(email);
 
-    switch (user) {
+    if (!user) return res.status(404).json();
+    return res.status(200).json(user);
+  },
+
+  async pararDeSeguirTarefa(req, res) {
+    const { email } = req.params;
+    const { codTarefa } = req.body;
+
+    const result = await UsuarioService.pararDeSeguirTarefa(email, codTarefa);
+
+    switch (result) {
       case false:
         return res.status(404).json();
       default:
-        return res.status(200).json(user);
+        return res.status(200).json();
+    }
+  },
+
+  async seguirTarefa(req, res) {
+    const { email } = req.params;
+    const { codTarefa } = req.body;
+
+    const result = await UsuarioService.seguirTarefa(email, codTarefa);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json();
+    }
+  },
+
+  async getDashboard(req, res) {
+    const { email, adm } = req.params;
+
+    const dashboard = await UsuarioService.getDashboard(email, adm);
+
+    switch (dashboard) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(dashboard);
+    }
+  },
+
+  async pararDeSeguirUsuario(req, res) {
+    const { email } = req.params;
+    const { email: emailSeguir } = req.body;
+
+    const result = await UsuarioService.pararDeSeguirUsuario(
+      email,
+      emailSeguir
+    );
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json();
+    }
+  },
+
+  async seguirUsuario(req, res) {
+    const { email } = req.params;
+    const { email: emailSeguir } = req.body;
+
+    const result = await UsuarioService.seguirUsuario(email, emailSeguir);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json();
+    }
+  },
+
+  async isUsuarioSeguidoPorUsuario(req, res) {
+    const { email, emailSeguido } = req.params;
+
+    const result = await UsuarioService.isUsuarioSeguidoPorUsuario(
+      email,
+      emailSeguido
+    );
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json();
+    }
+  },
+
+  async updateUserAdmin(req, res) {
+    const { email } = req.params;
+    const { emailNovo, funcao, status } = req.body;
+
+    const result = await UsuarioService.updateUserAdmin(
+      email,
+      emailNovo,
+      funcao,
+      status
+    );
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(true);
+    }
+  },
+
+  async deleteUser(req, res) {
+    const { email } = req.params;
+
+    const result = await UsuarioService.deleteUser(email);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(true);
+    }
+  },
+
+  async addUser(req, res) {
+    const { email, nome, status } = req.body;
+
+    const result = await UsuarioService.addUser(email, nome, status);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(201).json(result);
+    }
+  },
+
+  async addUserTeam(req, res) {
+    const { email } = req.params;
+    const { codTime } = req.body;
+
+    const result = await UsuarioService.addUserTeam(email, codTime);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(201).json(result);
+    }
+  },
+
+  async alteraStatus(req, res) {
+    const { email } = req.params;
+    const { status } = req.body;
+
+    const result = await UsuarioService.alteraStatus(email, status);
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(true);
+    }
+  },
+
+  async updateUser(req, res) {
+    const { email } = req.params;
+    const { nome, funcao, github, linkedin, cep, numEnd, complEnd } = req.body;
+
+    const result = await UsuarioService.updateUser(
+      email,
+      nome,
+      funcao,
+      github,
+      linkedin,
+      cep,
+      numEnd,
+      complEnd
+    );
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(200).json(result);
     }
   },
 };

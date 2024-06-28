@@ -98,8 +98,8 @@ class Usuario4JRepository {
 
     for (const avaliacao of result.records) {
       avaliacoes.push({
-        nota: avaliacao.get("a").properties.nota.low,
-        comentario: avaliacao.get("a").properties.comentario,
+        avaliacao: avaliacao.get("a").properties.nota.low,
+        descricao: avaliacao.get("a").properties.comentario,
         usuario: avaliacao.get("u2").properties.id.low,
       });
     }
@@ -118,8 +118,8 @@ class Usuario4JRepository {
 
     for (const avaliacao of result.records) {
       avaliacoes.push({
-        nota: avaliacao.get("a").properties.nota.low,
-        comentario: avaliacao.get("a").properties.comentario,
+        avaliacao: avaliacao.get("a").properties.nota.low,
+        descricao: avaliacao.get("a").properties.comentario,
         usuario: avaliacao.get("u2").properties.id.low,
       });
     }
@@ -144,7 +144,7 @@ class Usuario4JRepository {
   }
 
   // Validado
-  static async getSeguidosUsuario(idUsuario) {
+  static async getUsuariosSeguidos(idUsuario) {
     const session = neo4jdb.session();
     const seguidos = [];
     const result =

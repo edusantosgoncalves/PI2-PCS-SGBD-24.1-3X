@@ -41,6 +41,12 @@ class ProjetoRepository {
 
     // Buscando comentarios
     let comentarios = await ComentarioModel.findAll({
+      attributes: [
+        "idComentario",
+        "descricao",
+        "idUsuario",
+        ["createdAt", "dtCriacao"],
+      ],
       where: { idTarefa: id },
       include: {
         model: UsuarioModel,
