@@ -40,10 +40,21 @@ class UsuarioRepository {
     });
   }
 
-  // NoVO
+  // NOVO
   static async getUserNameAndImageURLById(id) {
     return await UsuarioModel.findOne({
       attributes: ["nome", "urlImagem"],
+      where: {
+        idUsuario: id,
+      },
+      raw: true,
+    });
+  }
+
+  // NOVO
+  static async getUserEmailById(id) {
+    return await UsuarioModel.findOne({
+      attributes: ["email"],
       where: {
         idUsuario: id,
       },

@@ -70,7 +70,7 @@ class Usuario4JRepository {
 
     await session.close();
 
-    return result.records.length > 0 ? result.records[0] : false;
+    return result.records.length > 0;
   }
 
   // Validado

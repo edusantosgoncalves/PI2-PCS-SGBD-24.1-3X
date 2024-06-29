@@ -29,10 +29,18 @@ class ProjetoRepository {
   }
 
   // Validado: atualizar no front recuperacao de comentarios da tarefa
-  static async getTarefaById(id) {
+  static async getById(id) {
     let tarefa = await TarefaModel.findOne({
       where: { idTarefa: id },
       raw: true,
+      include: {
+        model: UsuarioModel,
+        attributes: [
+          ["nome", "nomeUsuarioResp"],
+          ["email", "usuarioResp"],
+          "urlImagem",
+        ],
+      },
     });
 
     if (!tarefa) {
@@ -117,6 +125,11 @@ class ProjetoRepository {
   // Validado
   static async getComentariosPorTarefa(id) {
     const comentarios = await ComentarioModel.findAll({
+      attributes: [
+        ["idComentario", "codComentario"],
+        "descricao",
+        ["createdAt", "dtCriacao"],
+      ],
       where: { idTarefa: id },
       include: {
         model: UsuarioModel,

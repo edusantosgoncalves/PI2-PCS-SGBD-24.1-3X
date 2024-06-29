@@ -19,15 +19,15 @@ router.put("/api/usuarios-adm/:email", UsuarioController.updateUserAdmin); // ! 
 router.get(
   "/api/usuarios/:id/seguindo/:emailSeguido",
   UsuarioController.isUsuarioSeguidoPorUsuario
-); // * Vrf se um usuario segue outro
+); //! Vrf se um usuario segue outro
 router.put(
   "/api/usuarios/:email/usuario/seguir",
   UsuarioController.seguirUsuario
-); // * Parar de seguir usuario
+); // ! Seguir usuario
 router.put(
   "/api/usuarios/:email/usuario/parar-seguir",
   UsuarioController.pararDeSeguirUsuario
-); // * Parar de seguir usuario
+); // ! Parar de seguir usuario
 router.get(
   "/api/usuarios/:email/dashboard/:adm",
   UsuarioController.getDashboard
@@ -41,11 +41,11 @@ router.get(
 router.put(
   "/api/usuarios/:email/tarefa/seguir",
   UsuarioController.seguirTarefa
-); // * Seguir tarefa
+); // ! Seguir tarefa
 router.put(
   "/api/usuarios/:email/tarefa/parar-seguir",
   UsuarioController.pararDeSeguirTarefa
-); // * Parar de seguir tarefa
+); // ! Parar de seguir tarefa
 router.get(
   "/api/usuarios/:email/tarefa/seguidas",
   UsuarioController.getTarefasSeguidasUsuario

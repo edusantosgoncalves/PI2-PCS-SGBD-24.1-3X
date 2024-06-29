@@ -13,17 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // * Importando as rotas novas
-app.use(require("./routes/UsuarioRoutes"));
+app.use(require("./routes/Usuario"));
+app.use(require("./routes/Time"));
+app.use(require("./routes/Tarefa"));
+app.use(require("./routes/Projeto"));
 
 // * Importando as rotas antigas
-/*app.use(require("./routes-old/ProjetoRoutes"));
-app.use(require("./routes-old/TarefaRoutes"));
-app.use(require("./routes-old/TimeRoutes"));
-app.use(require("./routes-old/UsuarioRoutes"));
-app.use(require("./routes-old/APIsRoutes"));*/
 
-/* GOOGLE AUTH */
-//Importando o framework Express-Session e instanciando-o
+// * GOOGLE AUTH
+// . Importando o framework Express-Session e instanciando-o
 const session = require("express-session");
 app.use(
   session({
@@ -33,18 +31,18 @@ app.use(
   })
 );
 
-//Importando o framework Passport
+// . Importando o framework Passport
 const passport = require("passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Variável para armazenar o perfil do usuário
+// . Variável para armazenar o perfil do usuário
 let userProfile;
 
-// Rota de erro - autenticação google
+// . Rota de erro - autenticação google
 app.get("/google/error", (req, res) => res.send("Erro ao logar"));
 
-// Rota de sucesso - autenticação google
+// . Rota de sucesso - autenticação google
 app.get("/google/success", (req, res) =>
   res.redirect(
     `${process.env.CLIENT_PREFIX}/validarusu?email=` +
@@ -64,18 +62,18 @@ passport.deserializeUser(function (obj, cb) {
   cb(null, obj);
 });
 
-/*  Google AUTH  */
-//Importando o framework Passport-Google-OAuth
+// *  Google AUTH
+// . Importando o framework Passport-Google-OAuth
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
-//Definindo o seu client ID e Secret do Google (foi cadastrado no API do Google Cloud)
+// . Definindo o seu client ID e Secret do Google (foi cadastrado no API do Google Cloud)
 
-//Importando o .env
+// . Importando o .env
 require("dotenv").config();
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_SECRET;
 
-//Requisitando a autenticação do usuário
+// . Requisitando a autenticação do usuário
 passport.use(
   new GoogleStrategy(
     {
@@ -98,10 +96,10 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  // Autenticação incorreta, redirecionamento para a falha
+  // . Autenticação incorreta, redirecionamento para a falha
   passport.authenticate("google", { failureRedirect: "/error" }),
   function (req, res) {
-    // Autenticação correta, redirecionamento para o sucesso.
+    // . Autenticação correta, redirecionamento para o sucesso.
     req.session.regenerate(function (err) {
       if (err) {
         console.error("Error regenerating session:", err);

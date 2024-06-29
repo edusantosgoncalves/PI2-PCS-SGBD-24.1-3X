@@ -19,7 +19,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "neo4j-driver": "^5.20.0",
-    "nodemailer": "^6.9.0",
+    "nodemailer": "^6.9.14",
     "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",

@@ -92,12 +92,10 @@ module.exports = {
 
     const result = await UsuarioService.pararDeSeguirTarefa(email, codTarefa);
 
-    switch (result) {
-      case false:
-        return res.status(404).json();
-      default:
-        return res.status(200).json();
-    }
+    if (result < 0)
+      return res.status(404).json({ message: "Usuário não encontrado" });
+
+    return res.status(200).json(result);
   },
 
   async seguirTarefa(req, res) {
@@ -106,12 +104,10 @@ module.exports = {
 
     const result = await UsuarioService.seguirTarefa(email, codTarefa);
 
-    switch (result) {
-      case false:
-        return res.status(404).json();
-      default:
-        return res.status(200).json();
-    }
+    if (result < 0)
+      return res.status(404).json({ message: "Usuário não encontrado" });
+
+    return res.status(200).json(result);
   },
 
   async getDashboard(req, res) {
@@ -136,12 +132,10 @@ module.exports = {
       emailSeguir
     );
 
-    switch (result) {
-      case false:
-        return res.status(404).json();
-      default:
-        return res.status(200).json();
-    }
+    if (result < 0)
+      return res.status(404).json({ message: "Usuário não encontrado" });
+
+    return res.status(200).json(result);
   },
 
   async seguirUsuario(req, res) {
@@ -150,12 +144,10 @@ module.exports = {
 
     const result = await UsuarioService.seguirUsuario(email, emailSeguir);
 
-    switch (result) {
-      case false:
-        return res.status(404).json();
-      default:
-        return res.status(200).json();
-    }
+    if (result < 0)
+      return res.status(404).json({ message: "Usuário não encontrado" });
+
+    return res.status(200).json(result);
   },
 
   async isUsuarioSeguidoPorUsuario(req, res) {
@@ -166,12 +158,10 @@ module.exports = {
       emailSeguido
     );
 
-    switch (result) {
-      case false:
-        return res.status(404).json();
-      default:
-        return res.status(200).json();
-    }
+    if (result < 0)
+      return res.status(404).json({ message: "Usuário não encontrado" });
+
+    return res.status(200).json(result);
   },
 
   async updateUserAdmin(req, res) {

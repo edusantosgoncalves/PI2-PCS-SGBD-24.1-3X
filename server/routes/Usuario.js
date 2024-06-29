@@ -36,15 +36,15 @@ router.get(
 router.get(
   "/api/usuarios/:email/seguindo/:emailSeguido",
   UsuarioController.isUsuarioSeguidoPorUsuario
-); // * Verifica se um usuario segue outro
+); // . Verifica se um usuario segue outro
 router.put(
   "/api/usuarios/:email/usuario/seguir",
   UsuarioController.seguirUsuario
-); // * Parar de seguir usuario
+); // . Seguir usuario
 router.put(
   "/api/usuarios/:email/usuario/parar-seguir",
   UsuarioController.pararDeSeguirUsuario
-); // * Parar de seguir usuario
+); // . Parar de seguir usuario
 
 // ! Relacionadas a tarefa:
 router.get(
@@ -54,18 +54,17 @@ router.get(
 router.put(
   "/api/usuarios/:email/tarefa/seguir",
   UsuarioController.seguirTarefa
-); // * Seguir tarefa
+); // . Seguir tarefa
 router.put(
   "/api/usuarios/:email/tarefa/parar-seguir",
   UsuarioController.pararDeSeguirTarefa
-); // * Parar de seguir tarefa
+); // . Parar de seguir tarefa
 
 // ! Relacionados a projetos
 router.get(
   "/api/usuarios/:email/projetos",
   UsuarioController.getProjetosUsuario
 ); // . Busca projetos de um usuario
-module.exports = router;
 
 // ! Relacionado à avaliação:
 router.get(
@@ -77,3 +76,5 @@ router.get(
   "/api/usuarios/:email/avaliacoes-feitas",
   UsuarioController.getAvaliacoesDeUsuario
 ); // . Busca avaliações de um usuario (avaliador)
+
+module.exports = router;

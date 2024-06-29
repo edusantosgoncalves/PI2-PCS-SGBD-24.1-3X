@@ -109,7 +109,7 @@ class UsuarioService {
 
     if (userId < 0) return userId;
 
-    return await UsuarioRepository.seguirTarefa(userId, idTarefa);
+    return await Tarefa4JRepository.seguirTarefa(userId, idTarefa);
   }
 
   static async pararDeSeguirTarefa(email, idTarefa) {
@@ -128,7 +128,7 @@ class UsuarioService {
     const tasks = await Tarefa4JRepository.getTarefasSeguidasUsuario(userId);
 
     for (let i = 0; i < tasks.length; i++) {
-      const taskData = await TarefaRepository.getTarefaById(tasks[i]);
+      const taskData = await TarefaRepository.getById(tasks[i]);
 
       tasks[i] = taskData;
     }
@@ -160,7 +160,10 @@ class UsuarioService {
     if (userSeguidorId < 0) return userSeguidorId;
     if (userSeguidoId < 0) return userSeguidoId;
 
-    return await UsuarioRepository.seguirUsuario(userSeguidorId, userSeguidoId);
+    return await Usuario4JRepository.seguirUsuario(
+      userSeguidorId,
+      userSeguidoId
+    );
   }
 
   static async pararDeSeguirUsuario(email, emailSeguido) {
@@ -175,7 +178,7 @@ class UsuarioService {
     if (userSeguidorId < 0) return userSeguidorId;
     if (userSeguidoId < 0) return userSeguidoId;
 
-    return await UsuarioRepository.pararDeSeguirUsuario(
+    return await Usuario4JRepository.pararDeSeguirUsuario(
       userSeguidorId,
       userSeguidoId
     );

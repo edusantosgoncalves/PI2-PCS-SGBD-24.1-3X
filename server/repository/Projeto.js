@@ -51,6 +51,7 @@ class ProjetoRepository {
       nome: nome,
       descricao: descricao,
       idTime: timeResponsavel,
+      dtInicio: sequelize.fn("NOW"),
       ativo: true,
     }).then((projeto) => {
       return projeto.get({ plain: true });
@@ -150,8 +151,8 @@ class ProjetoRepository {
   }
 
   // Validado
-  static async validaNomeProjeto(email) {
-    const projeto = await ProjetoModel.findOne({ where: { nome: email } });
+  static async validaNomeProjeto(nome) {
+    const projeto = await ProjetoModel.findOne({ where: { nome: nome } });
 
     return !projeto; // Se existir projeto, retorna false, se não, retorna true
   }
@@ -224,23 +225,23 @@ class ProjetoRepository {
   }
 
   // Validado
-  static async getTarefasByProjeto(idProjeto) {
+  static async getQtdTarefasByProjeto(idProjeto) {
     const query = await sequelize.query(
-      `SELECT qtdtarefas FROM "3x".PROJETOSVIEW WHERE codprojeto = ${idProjeto}`
+      `SELECT qtdtarefas AS "qtdTarefas" FROM "3x".PROJETOSVIEW WHERE codprojeto = ${idProjeto}`
     );
 
     if (query[0].length === 0) return false;
 
-    return query[0][0].qtdtarefas;
+    return query[0][0];
   }
 
   // Validado
-  static async getTarefasAtivasProjeto(idProjeto) {
+  static async getQtdTarefasAtivasProjeto(idProjeto) {
     const query = await sequelize.query(
-      `SELECT qtdTarefasAtivas FROM "3x".PROJETOSVIEW WHERE codprojeto = ${idProjeto}`
+      `SELECT qtdTarefasAtivas AS "qtdTarefasAtivas" FROM "3x".PROJETOSVIEW WHERE codprojeto = ${idProjeto}`
     );
 
-    return query[0];
+    return query[0][0];
   }
 
   // Validado
