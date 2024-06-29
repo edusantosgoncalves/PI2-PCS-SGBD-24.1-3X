@@ -1,5 +1,5 @@
 // ! REQUIRE MODEL
-const Usuario = require('../models/Usuario.js');
+const Usuario = require('../models-old/Usuario.js');
 
 // * Cria a classe de CRUD do usuário 
 module.exports = {

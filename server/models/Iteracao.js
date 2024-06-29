@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-  let Tarefa = sequelize.define(
-    "Tarefa",
+  let Iteracao = sequelize.define(
+    "Iteracao",
     {
-      // . No nosso modelo estava codTarefa, ajustar
-      idTarefa: {
+      // . No nosso modelo estava codIteracao, ajustar
+      idIteracao: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -17,22 +17,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
       },
       // . No nosso modelo estava dtCriacao, ajustar
-      status: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        default: 1,
-        /* 
-        1 - Em andamento
-        3 - Concluída
-        4 - Inativada
-        */
+      dtInicio: {
+        type: DataTypes.DATE,
+      },
+      // . No nosso modelo estava dtFim, ajustar
+      dtConclusao: {
+        type: DataTypes.DATE,
       },
     },
     {
-      tableName: "tarefa",
+      tableName: "iteracao",
       schema: "3x",
     }
   );
 
-  return Tarefa;
+  return Iteracao;
 };

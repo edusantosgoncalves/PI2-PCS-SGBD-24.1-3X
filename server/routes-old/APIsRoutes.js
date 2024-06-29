@@ -1,6 +1,6 @@
 // * Importando as bibliotecas
 const { Router } = require('express');
-const APIsController = require('../controllers/APIsController');
+const APIsController = require('../controllers-old/APIsController');
 const router = Router();
 
 

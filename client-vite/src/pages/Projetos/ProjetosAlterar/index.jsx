@@ -413,11 +413,9 @@ const ProjetosAlterar = () => {
       setENomeValido(true);
       setLabelNome("Válido!");
     } else {
-      Axios.put(
-        `${serverPrefix}/api/projetos/${
-          document.getElementById("nome-projeto").value
-        }/validaNome`
-      ).then((respostaValida) => {
+      Axios.post(`${serverPrefix}/api/projetos/validaNome`, {
+        nome: document.getElementById("nome-projeto").value,
+      }).then((respostaValida) => {
         console.log(respostaValida);
         if (respostaValida.data.valido === true) {
           setENomeValido(true);
