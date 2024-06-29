@@ -66,7 +66,6 @@ const TarefasProjeto = () => {
     let adminLS = localStorage.getItem("admin");
     let usuarioLS = JSON.parse(localStorage.getItem("usuario"));
     let projetoLS = JSON.parse(localStorage.getItem("projeto"));
-
     //Atribuindo-os a locationState
     setLocationState({
       admin: adminLS,
@@ -74,7 +73,7 @@ const TarefasProjeto = () => {
       projeto: projetoLS,
     });
 
-    getTarefas(projetoLS.codProjeto);
+    getTarefas(projetoLS.codprojeto);
   }, []);
 
   //! Variável que controla se já carregou dados

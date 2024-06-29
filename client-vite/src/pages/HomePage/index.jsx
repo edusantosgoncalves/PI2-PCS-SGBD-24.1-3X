@@ -32,16 +32,6 @@ const HomePage = () => {
 
   // ! OnLoad event -> Lendo se houve acesso negado antes da página carregar por completo!
   React.useEffect(() => {
-    console.log(location);
-    /*//TESTE SETANDO LOCALSTORAGE
-        localStorage.setItem("usuario", JSON.stringify(location.state.usuario))
-        localStorage.setItem("admin", location.state.admin)
-
-        if (location.state) //Se receber esses dados, coloca na variável...
-            setLocationState(location.state);
-        let eAdmin = location.state.admin ? 1 : 0;
-        getDashboard(location.state.usuario.email, eAdmin)*/
-
     if (
       localStorage.hasOwnProperty("admin") === false ||
       localStorage.hasOwnProperty("usuario") === false
@@ -81,6 +71,7 @@ const HomePage = () => {
   const getDashboard = (email, admin) => {
     Axios.get(`${serverPrefix}/api/usuarios/${email}/dashboard/${admin}`).then(
       (response) => {
+        console.log(response.data);
         setDashboard(response.data);
         setJaCarregou(true);
       }

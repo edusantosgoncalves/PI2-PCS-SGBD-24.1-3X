@@ -256,7 +256,7 @@ module.exports = {
       case false:
         return res.status(404).json();
       default:
-        return res.status(200).json(result);
+        return res.status(201).json(result);
     }
   },
 };

@@ -296,7 +296,24 @@ class UsuarioService {
 
     const adminBool = admin === "1";
 
-    return await UsuarioRepository.getDashboard(userId, adminBool);
+    // Busca os dados do dashboard
+    const dashboardData = await UsuarioRepository.getDashboard(
+      userId,
+      adminBool
+    );
+
+    const dashboard = {};
+    // Para cada atributo do dashboard, se o atributo nao for nulo e vazio, inseri-lo no objeto "dashboard"
+    for (const dashData of dashboardData) {
+      Object.keys(dashData).forEach((key) => {
+        if (dashData[key] && dashData[key] !== "") {
+          console.log(key + " -> " + dashData[key]);
+          dashboard[key] = dashData[key];
+        }
+      });
+    }
+
+    return dashboard;
   }
 
   static async updateUserAdmin(email, emailNovo, funcao, status) {

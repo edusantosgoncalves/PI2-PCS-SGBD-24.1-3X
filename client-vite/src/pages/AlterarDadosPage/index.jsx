@@ -77,11 +77,10 @@ const AlterarDadosPage = () => {
     //Inserindo-os nas variáveis
     setUsuarioEmail(usuarioLS.email);
     document.getElementById("funcao").value = usuarioLS.funcao;
-    document.getElementById("CEP").value = usuarioLS["CEP"];
+    document.getElementById("CEP").value = usuarioLS["cep"];
     buscaEndereco();
-    document.getElementById("CEP_numEnd").value = usuarioLS.CEP_numEnd;
-    document.getElementById("CEP_complemento").value =
-      usuarioLS.CEP_complemento;
+    document.getElementById("CEP_numEnd").value = usuarioLS.cepnumEndereco;
+    document.getElementById("CEP_complemento").value = usuarioLS.cepComplemento;
   }, []);
 
   //! Função que valida o usuário no banco e conforme a resposta do status, redireciona a página indicada
@@ -124,8 +123,6 @@ const AlterarDadosPage = () => {
       linkedin: document.getElementById("linkedin").value,
       github: document.getElementById("github").value,
     }).then((response) => {
-      console.log(response); //* TESTANDO RESPOSTA!
-
       if (response.status === 201) {
         Axios.get(
           `${serverPrefix}/api/usuarios/${locationState.usuario.email}`

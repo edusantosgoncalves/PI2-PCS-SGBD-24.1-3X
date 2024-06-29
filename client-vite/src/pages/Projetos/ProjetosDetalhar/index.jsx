@@ -84,12 +84,12 @@ const ProjetosDetalhar = () => {
     setLocationState({
       admin: adminLS,
       usuario: usuarioLS,
-      projeto: projetoLS,
+      projeto: projetoLS[0],
     });
 
     if (projetoLS.ativo) setStatusProjeto(true);
-
-    getIteracoes(projetoLS.codProjeto);
+    console.log(projetoLS);
+    getIteracoes(projetoLS[0].codprojeto);
   }, []);
 
   // ! Declarando variável que controlará o PopUp de Inativar usuário...
@@ -330,7 +330,7 @@ const ProjetosDetalhar = () => {
                       component="h2"
                       sx={{ color: "subTituloDetalha" }}
                     >
-                      {locationState.projeto.dtCriacao}
+                      {locationState.projeto.dtcriacao}
                     </Typography>
                   </Container>
 
@@ -351,10 +351,10 @@ const ProjetosDetalhar = () => {
                         }}
                         className={"link-underline-transicao"}
                         onClick={() => {
-                          detalharTime(locationState.projeto.timeResponsavel);
+                          detalharTime(locationState.projeto.timeresponsavel);
                         }}
                       >
-                        &nbsp;{locationState.projeto.nomeTime}
+                        &nbsp;{locationState.projeto.nometime}
                       </Link>
                     </Typography>
                   </Container>
@@ -369,7 +369,7 @@ const ProjetosDetalhar = () => {
                       component="h2"
                       sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                     >
-                      {locationState.projeto.dtConclusao === null
+                      {locationState.projeto.dtconclusao === null
                         ? "Prazo:"
                         : "Concluído em:"}
                     </Typography>
@@ -379,9 +379,9 @@ const ProjetosDetalhar = () => {
                       component="h2"
                       sx={{ color: "subTituloDetalha" }}
                     >
-                      {locationState.projeto.dtConclusao === null
-                        ? locationState.projeto.Prazo
-                        : locationState.projeto.dtConclusao}
+                      {locationState.projeto.dtconclusao === null
+                        ? locationState.projeto.prazo
+                        : locationState.projeto.dtconclusao}
                     </Typography>
                   </Container>
                 </Container>
@@ -422,9 +422,8 @@ const ProjetosDetalhar = () => {
                               value={iteracao.nome}
                               key={
                                 "ITERA_SLC_" +
-                                iteracao.nome +
-                                iteracao.dtInicio +
-                                iteracao.dtFim
+                                iteracao.codIteracao +
+                                iteracao.nome
                               }
                               sx={{ color: "subTituloDetalha" }}
                             >
@@ -432,9 +431,9 @@ const ProjetosDetalhar = () => {
                                 primary={
                                   iteracao.nome +
                                   ": de " +
-                                  formatData(iteracao.dtInicio) +
+                                  iteracao.dtInicio +
                                   " a " +
-                                  formatData(iteracao.dtFim)
+                                  iteracao.dtConclusao
                                 }
                                 sx={{
                                   color: "subTituloDetalha",
