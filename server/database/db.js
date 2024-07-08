@@ -134,15 +134,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
-
-/*new sql.ConnectionPool(config)
-  .connect()
-  .then(pool => {
-    console.log('Conectado ao Azure SQL SERVER')
-    return pool
-  })
-  .catch(err => console.log('Erro na conexão: ', err))
-
-module.exports = {
-  sql, poolPromise
-}*/

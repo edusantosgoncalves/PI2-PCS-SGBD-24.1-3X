@@ -3,13 +3,15 @@ const {
   Tarefa: TarefaModel,
   Comentario: ComentarioModel,
   Usuario: UsuarioModel,
+  Iteracao: IteracaoModel,
+  Projeto: ProjetoModel,
 } = require("../database/db");
 
 class ProjetoRepository {
   // Validado
   static async get() {
     const query = await sequelize.query(
-      `SELECT * FROM "3x".TAREFAS_ITERACAO_PROJETOS_USUARIOS`
+      `SELECT codtarefa AS "idTarefa", nome, descricao, status, projetotarefa AS "projetoTarefa", nomeprojeto AS "nomeProjeto", coditeracaofk AS "idIteracao", nomeiteracao AS "nomeIteracao", usuarioresp AS "usuarioResp", nomeusuarioresp AS "nomeUsuarioResp", emailusuarioresp AS "emailUsuarioResp" FROM "3x".TAREFAS_ITERACAO_PROJETOS_USUARIOS`
     );
 
     return query[0];
@@ -18,7 +20,7 @@ class ProjetoRepository {
   // Validado
   static async getTarefasViewByUsuario(idUsuario) {
     let tarefa = await sequelize.query(
-      `SELECT * FROM "3x".TAREFAS_ITERACAO_PROJETOS_USUARIOS WHERE usuarioResp = ${idUsuario}`
+      `SELECT codtarefa AS "idTarefa", nome, descricao, status, projetotarefa AS "projetoTarefa", nomeprojeto AS "nomeProjeto", coditeracaofk AS "idIteracao", nomeiteracao AS "nomeIteracao", usuarioresp AS "usuarioResp", nomeusuarioresp AS "nomeUsuarioResp", emailusuarioresp AS "emailUsuarioResp" FROM "3x".TAREFAS_ITERACAO_PROJETOS_USUARIOS WHERE usuarioResp = ${idUsuario}`
     );
 
     if (tarefa[0].length === 0) {
@@ -33,37 +35,32 @@ class ProjetoRepository {
     let tarefa = await TarefaModel.findOne({
       where: { idTarefa: id },
       raw: true,
-      include: {
-        model: UsuarioModel,
-        attributes: [
-          ["nome", "nomeUsuarioResp"],
-          ["email", "usuarioResp"],
-          "urlImagem",
-        ],
-      },
+      include: [
+        {
+          model: UsuarioModel,
+          attributes: [
+            ["nome", "nomeUsuarioResp"],
+            ["email", "usuarioResp"],
+            "urlImagem",
+          ],
+        },
+        {
+          model: IteracaoModel,
+          attributes: [["nome", "nomeIteracao"]],
+          include: {
+            model: ProjetoModel,
+            attributes: [
+              ["nome", "nomeProjeto"],
+              ["idProjeto", "projetoTarefa"],
+            ],
+          },
+        },
+      ],
     });
 
     if (!tarefa) {
       return false;
     }
-
-    // Buscando comentarios
-    let comentarios = await ComentarioModel.findAll({
-      attributes: [
-        "idComentario",
-        "descricao",
-        "idUsuario",
-        ["createdAt", "dtCriacao"],
-      ],
-      where: { idTarefa: id },
-      include: {
-        model: UsuarioModel,
-        attributes: ["nome", "email", "urlImagem"],
-      },
-      raw: true,
-    });
-
-    tarefa.comentarios = comentarios;
 
     return tarefa;
   }
@@ -128,7 +125,12 @@ class ProjetoRepository {
       attributes: [
         ["idComentario", "codComentario"],
         "descricao",
-        ["createdAt", "dtCriacao"],
+        [
+          sequelize.literal(
+            `to_char("Comentario"."createdAt", 'DD/MM/YYYY'::text)`
+          ),
+          "dtCriacao",
+        ],
       ],
       where: { idTarefa: id },
       include: {
@@ -183,7 +185,7 @@ class ProjetoRepository {
       return false;
     }
 
-    return tarefas;
+    return tarefas.length;
   }
 }
 

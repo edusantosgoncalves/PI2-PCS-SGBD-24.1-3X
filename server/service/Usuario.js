@@ -130,6 +130,22 @@ class UsuarioService {
     for (let i = 0; i < tasks.length; i++) {
       const taskData = await TarefaRepository.getById(tasks[i]);
 
+      // Formatando campos de usuario, iteração e projeto
+      taskData.usuarioResp = taskData["Usuario.usuarioResp"];
+      taskData.nomeUsuarioResp = taskData["Usuario.nomeUsuarioResp"];
+      taskData.nomeIteracao = taskData["Iteracao.nomeIteracao"];
+      taskData.idProjeto = taskData["Iteracao.Projeto.projetoTarefa"];
+      taskData.nomeProjeto = taskData["Iteracao.Projeto.nomeProjeto"];
+      taskData.nomeTarefa = taskData["nome"];
+
+      // Removendo campos desnecessários
+      delete taskData["Usuario.usuarioResp"];
+      delete taskData["Usuario.nomeUsuarioResp"];
+      delete taskData["Iteracao.nomeIteracao"];
+      delete taskData["Iteracao.Projeto.projetoTarefa"];
+      delete taskData["Iteracao.Projeto.nomeProjeto"];
+      delete taskData["nome"];
+
       tasks[i] = taskData;
     }
 
@@ -210,7 +226,7 @@ class UsuarioService {
     const users = await Usuario4JRepository.getUsuariosSeguidos(userId);
 
     for (let i = 0; i < users.length; i++) {
-      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+      const userData = await UsuarioRepository.getUserEmailNameAndImageURLById(
         users[i]
       );
 
@@ -228,7 +244,7 @@ class UsuarioService {
     let users = await Usuario4JRepository.getAvaliacoesRecebidasUsuario(userId);
 
     for (let i = 0; i < users.length; i++) {
-      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+      const userData = await UsuarioRepository.getUserEmailNameAndImageURLById(
         users[i].usuario
       );
 
@@ -251,7 +267,7 @@ class UsuarioService {
     const users = await Usuario4JRepository.getAvaliacoesFeitasUsuario(userId);
 
     for (let i = 0; i < users.length; i++) {
-      const userData = await UsuarioRepository.getUserNameAndImageURLById(
+      const userData = await UsuarioRepository.getUserEmailNameAndImageURLById(
         users[i].usuario
       );
 
@@ -267,21 +283,34 @@ class UsuarioService {
   }
 
   static async avaliarUsuario(email, emailAvaliado, avaliacao, descricao) {
+    // Se a avaliação não for um número entre 1 e 5, retorne -3
+    if (avaliacao < 1 || avaliacao > 5) return -3;
+
+    // obtendo os ids dos usuários
     const userAvaliadorId = await UsuarioService.getUserIdByEmailForActiveUser(
       email
     );
 
     const userAvaliadoId = await UsuarioService.getUserIdByEmailForActiveUser(
-      emailSeguido
+      emailAvaliado
     );
 
     if (userAvaliadorId < 0) return userAvaliadorId;
     if (userAvaliadoId < 0) return userAvaliadoId;
 
-    // Se a avaliação não for um número entre 1 e 5, retorne -3
-    if (avaliacao < 1 || avaliacao > 5) return -3;
+    // Verificando se há nó criado, se não, criar.
+    const hasUserAvaliadorNode = await Usuario4JRepository.get(userAvaliadorId);
+    const hasUserAvaliadoNode = await Usuario4JRepository.get(userAvaliadoId);
 
-    return await UsuarioRepository.avaliarUsuario(
+    if (!hasUserAvaliadorNode) {
+      await Usuario4JRepository.create(userAvaliadorId);
+    }
+
+    if (!hasUserAvaliadoNode) {
+      await Usuario4JRepository.create(userAvaliadoId);
+    }
+
+    return await Usuario4JRepository.avaliarUsuario(
       userAvaliadorId,
       userAvaliadoId,
       avaliacao,
@@ -307,7 +336,6 @@ class UsuarioService {
     for (const dashData of dashboardData) {
       Object.keys(dashData).forEach((key) => {
         if (dashData[key] && dashData[key] !== "") {
-          console.log(key + " -> " + dashData[key]);
           dashboard[key] = dashData[key];
         }
       });

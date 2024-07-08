@@ -10,6 +10,7 @@ db.sequelize
     console.log("\nModelos:\n", db.sequelize.models, "\n");
     // * Inserir parâmetro "{ force: true }" no método sync() para forçar a redefinição das tabelas que foram modificadas (drop table e recrição) !! ATENÇÃO: ISSO APAGA TODOS OS DADOS !!
     // ! await db.sequelize.sync({ force: true });
+    // ! await db.sequelize.sync({ alter: true });
     await db.sequelize.sync();
 
     // * Caso a tabela não seja recriada: usar função drop(), executar uma vez, depois remover (caso não remova, as tabelas serão sempre derrubadas)

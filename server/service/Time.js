@@ -17,7 +17,23 @@ class TimeService {
   }
 
   static async addUsuarioTime(id, listaUsuarios) {
-    const time = await TimeRepository.addUsuarioTime(id, listaUsuarios);
+    const listaUsuariosId = [];
+
+    for (const { email } of listaUsuarios) {
+      // . Obtendo id do usuario a partir do email
+      const usuario = await UsuarioRepository.getUserIdByEmailForActiveUser(
+        email
+      );
+
+      // . Verificando se o usuario existe
+      if (!usuario) {
+        continue;
+      }
+
+      listaUsuariosId.push(usuario.idUsuario);
+    }
+
+    const time = await TimeRepository.addUsuarioTime(id, listaUsuariosId);
     return time;
   }
 

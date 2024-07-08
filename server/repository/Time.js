@@ -45,7 +45,7 @@ class TimeRepository {
     time.usuarios = usuarios[0];
 
     const projetos = await sequelize.query(
-      `SELECT * FROM "3x".RetornaProjetosDeUmTime(${time.codTime})`
+      `SELECT codprojeto as "codProjeto", nome, descricao, dtcriacao as "dtCriacao", timeresponsavel as "timeResponsavel", nometime as "nomeTime", dtconclusao as "dtConclusao", prazo as "Prazo", qtdtarefas as "qtdTarefas", qtdtarefasativas as "qtdTarefasAtivas", ativo FROM "3x".PROJETOSView WHERE timeresponsavel = ${time.codTime}`
     );
 
     time.projetos = projetos[0];

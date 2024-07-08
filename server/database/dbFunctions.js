@@ -3,12 +3,11 @@ async function Functions(sequelize) {
   // * getTimesUsuario()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getTimesUsuario("Usuario" integer)
-      RETURNS TABLE ("codTime" integer, nome varchar,
-          "dtCriacao" timestamp with time zone,
-          ativo boolean, "qtdPess" bigint, "qtdProj" bigint)
-      language plpgsql
-      as $$
+      `create function gettimesusuario("Usuario" integer)
+    returns TABLE("codTime" integer, nome character varying, "dtCriacao" timestamp with time zone, ativo boolean, "qtdPess" bigint, "qtdProj" bigint)
+    language plpgsql
+    as
+    $$
       begin
           return query SELECT T.* 
           FROM "3x".USUARIO_TIME ut JOIN "3x".times_qtdpess_qtdproj T
@@ -24,19 +23,17 @@ async function Functions(sequelize) {
   // * getProjetosUsuario()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getProjetosUsuario("Usuario" integer)
-      RETURNS TABLE ("codProjeto" integer, nome varchar,
-          "dtCriacao" text, "timeResponsavel" integer, "nomeTime" varchar,
-          "Prazo" text, ativo boolean, "dtConclusao" timestamp with time zone,
-           "qtdTarefas" bigint)
-      language plpgsql
-      as $$
+      `create function getprojetosusuario("Usuario" integer)
+    returns TABLE("codProjeto" integer, nome character varying, "dtCriacao" text, "timeResponsavel" integer, "nomeTime" character varying, "Prazo" text, ativo boolean, "dtConclusao" text, "qtdTarefas" bigint)
+    language plpgsql
+    as
+    $$
       begin
           return query  SELECT p."idProjeto" as "codProjeto", p.nome,
                  TO_CHAR(p."dtInicio" AT TIME ZONE 'UTC-3', 'dd/mm/yyyy') as "dtCriacao",
                  p."idTime" as "timeResponsavel", time.nome AS "nomeTime",
                  TO_CHAR(MAX (i."dtConclusao") AT TIME ZONE 'UTC-3', 'dd/mm/yyyy') as "Prazo",
-                 p.ativo, p."dtConclusao", count(T2."idTarefa") as "qtdTarefas"
+                 p.ativo,TO_CHAR(MAX (i."dtConclusao") AT TIME ZONE 'UTC-3', 'dd/mm/yyyy') as "dtConclusao", count(T2."idTarefa") as "qtdTarefas"
               FROM "3x".PROJETO p
            JOIN 
            (SELECT t.* FROM "3x".USUARIO_TIME ut JOIN "3x".TIME t
@@ -56,13 +53,11 @@ async function Functions(sequelize) {
   // * getDashboardAdmin()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getDashboardAdmin("Usuario" integer)
-      RETURNS TABLE("qtdTimesUsuario" bigint, "qtdTimesSys" bigint,
-                   "qtdProjetosUsuario" bigint,  "qtdProjetosSys" bigint,
-                   "qtdTarefas" bigint, "qtdTarefasSys" bigint,
-                    "qtdTarefasSemana" bigint, "qtdUsuarios" bigint)
-      language plpgsql
-      as $$
+      `create function getdashboardadmin("Usuario" integer)
+    returns TABLE("qtdTimesUsuario" bigint, "qtdTimesSys" bigint, "qtdProjetosUsuario" bigint, "qtdProjetosSys" bigint, "qtdTarefas" bigint, "qtdTarefasSys" bigint, "qtdTarefasSemana" bigint, "qtdUsuarios" bigint)
+    language plpgsql
+    as
+    $$
       begin
       RETURN QUERY (
           -- Times do usuario
@@ -137,11 +132,11 @@ async function Functions(sequelize) {
   // * getDashboard()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getdashboard("Usuario" integer)
-      returns TABLE("qtdTimesUsuario" bigint, "qtdProjetosUsuario" bigint, "qtdTarefas" bigint, "qtdTarefasSemana" bigint)
-      language plpgsql
-  as
-  $$
+      `create function getdashboard("Usuario" integer)
+    returns TABLE("qtdTimesUsuario" bigint, "qtdProjetosUsuario" bigint, "qtdTarefas" bigint, "qtdTarefasSemana" bigint)
+    language plpgsql
+    as
+    $$
   begin
   RETURN QUERY (
       -- Times do usuario
@@ -177,10 +172,11 @@ async function Functions(sequelize) {
   // * RetornaUsuariosDeUmTime()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".RetornaUsuariosDeUmTime("Time" integer)
-      RETURNS TABLE ("email" varchar, nome varchar)
-      language plpgsql
-      as $$
+      `create function retornausuariosdeumtime("Time" integer)
+    returns TABLE(email character varying, nome character varying)
+    language plpgsql
+    as
+    $$
       begin
           return query  SELECT u.email, u.nome
           FROM "3x".USUARIO u JOIN "3x".USUARIO_TIME ut
@@ -195,10 +191,11 @@ async function Functions(sequelize) {
   // * RetornaProjetosDeUmTime()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".RetornaProjetosDeUmTime("Time" integer)
-      RETURNS TABLE ("codProjeto" integer, nome varchar)
-      language plpgsql
-      as $$
+      `create function retornaprojetosdeumtime("Time" integer)
+    returns TABLE("codProjeto" integer, nome character varying)
+    language plpgsql
+    as
+    $$
       begin
           return query SELECT p."idProjeto" as "codProjeto", p.nome
           FROM "3x".PROJETO p
@@ -212,13 +209,11 @@ async function Functions(sequelize) {
   // * getIteracoesProjetos()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getIteracoesProjetos("Projeto" integer)
-      RETURNS TABLE ("codIteracao" integer, nome varchar, descricao text,
-                    "dtInicio" text,
-                    "dtConclusao" text,
-                    "codProjetoFK" integer)
-      language plpgsql
-      as $$
+      `create function getiteracoesprojetos("Projeto" integer)
+    returns TABLE("codIteracao" integer, nome character varying, descricao text, "dtInicio" text, "dtConclusao" text, "codProjetoFK" integer)
+    language plpgsql
+    as
+    $$
       begin
           return query SELECT i."idIteracao" as "codIteracao", i.nome,i.descricao,
                  TO_CHAR(i."dtInicio" AT TIME ZONE 'UTC-3', 'dd/mm/yyyy') AS "dtInicio",
@@ -251,11 +246,11 @@ async function Functions(sequelize) {
   // * getTarefasProjeto()
   try {
     await sequelize.query(
-      `CREATE OR REPLACE FUNCTION "3x".getTarefasProjeto("Projeto" integer)
-      RETURNS TABLE ("codTarefa" integer, nome varchar, descricao text,
-                    "status" integer)
-      language plpgsql
-      as $$
+      `create function gettarefasprojeto("Projeto" integer)
+    returns TABLE("codTarefa" integer, nome character varying, descricao text, status integer)
+    language plpgsql
+    as
+    $$
       begin
           return query SELECT t."idTarefa" as codTarefa, t.nome,
                               t.descricao, t.status

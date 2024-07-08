@@ -67,6 +67,11 @@ router.get(
 ); // . Busca projetos de um usuario
 
 // ! Relacionado à avaliação:
+router.post(
+  "/api/usuarios/:email/avaliacoes",
+  UsuarioController.avaliarUsuario
+); // . Avalia um usuario
+
 router.get(
   "/api/usuarios/:email/avaliacoes-recebidas",
   UsuarioController.getAvaliacoesParaUsuario
