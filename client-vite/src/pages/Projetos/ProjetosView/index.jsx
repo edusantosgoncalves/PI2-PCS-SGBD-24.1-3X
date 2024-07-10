@@ -38,9 +38,6 @@ import BarraLogo from "../../../components/BarraLogo";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const ProjetosView = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -93,7 +90,7 @@ const ProjetosView = () => {
 
   const buscarTodosProjetos = () => {
     Axios.get(`${serverPrefix}/api/usuarios/-1/projetos`).then((response) => {
-      console.log(response.data); // TESTE -
+      // console.log(response.data); // !! LOG
       setListaProjetos(response.data);
       setJaCarregou(true);
     });
@@ -102,7 +99,7 @@ const ProjetosView = () => {
   const buscarProjetos = (email) => {
     Axios.get(`${serverPrefix}/api/usuarios/${email}/projetos`).then(
       (response) => {
-        console.log(response.data); // TESTE -
+        // console.log(response.data); // !! LOG
         setListaProjetos(response.data);
         setJaCarregou(true);
       }
@@ -117,7 +114,7 @@ const ProjetosView = () => {
 
   // ! Função para levar o usuario logado a pagina de alterar time
   const alterarDadosProjeto = (projeto) => {
-    console.log(projeto);
+    // console.log(projeto);  // !! LOG
 
     //Setando projeto no localStorage
     localStorage.setItem("projeto", JSON.stringify(projeto));
@@ -129,7 +126,7 @@ const ProjetosView = () => {
 
   // ! Função para levar o usuario logado a pagina de detalhar time
   const detalharProjeto = (projeto) => {
-    console.log(projeto);
+    // console.log(projeto);  // !! LOG
     //Setando projeto no localStorage
     localStorage.setItem("projeto", JSON.stringify(projeto));
 

@@ -182,7 +182,12 @@ const ProjetosCriar = () => {
   const criarIteracao = (nome, descricao, dtInicio, dtFim) => {
     setListaIteracoes([
       ...listaIteracoes,
-      { nome: nome, descricao: descricao, dtInicio: dtInicio, dtFim: dtFim },
+      {
+        nome: nome,
+        descricao: descricao,
+        dtInicio: dtInicio,
+        dtConclusao: dtFim,
+      },
     ]);
     setSaiItera(false);
   };
@@ -211,7 +216,7 @@ const ProjetosCriar = () => {
       nome: document.getElementById("nome-projeto").value,
     }).then((respostaValida) => {
       console.log(respostaValida);
-      if (respostaValida.data.valido === true) {
+      if (respostaValida.data === true) {
         setENomeValido(true);
         setLabelNome("Válido!");
       } else {
@@ -243,7 +248,6 @@ const ProjetosCriar = () => {
                   flexDirection: "column",
                   justifyContent: "space-evenly",
                 }}
-                onChange={validarNome}
                 className="boxNovoTime"
               >
                 <Container
@@ -264,6 +268,7 @@ const ProjetosCriar = () => {
                       marginLeft: "20px",
                       width: "inherit",
                     }}
+                    onChange={validarNome}
                   ></TextField>
                 </Container>
 
