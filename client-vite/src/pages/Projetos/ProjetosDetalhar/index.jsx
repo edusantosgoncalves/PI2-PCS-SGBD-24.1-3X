@@ -39,9 +39,6 @@ import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizad
 import PopupOKPersonalizado from "../../../components/PopupOKPersonalizado";
 
 const ProjetosDetalhar = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -84,12 +81,12 @@ const ProjetosDetalhar = () => {
     setLocationState({
       admin: adminLS,
       usuario: usuarioLS,
-      projeto: projetoLS[0],
+      projeto: projetoLS,
     });
 
     if (projetoLS.ativo) setStatusProjeto(true);
     console.log(projetoLS);
-    getIteracoes(projetoLS[0].codprojeto);
+    getIteracoes(projetoLS.codProjeto);
   }, []);
 
   // ! Declarando variável que controlará o PopUp de Inativar usuário...
@@ -114,20 +111,16 @@ const ProjetosDetalhar = () => {
 
   // ! Função que muda o status do projeto
   const alterarStatusProjeto = () => {
-    console.log(
-      "🚀 ~ file: index.jsx:85 ~ React.useEffect ~ projeto",
-      locationState.projeto
-    );
-
     if (statusProjeto === true) {
       Axios.get(
         `${serverPrefix}/api/projetos/${locationState.projeto.codProjeto}/tarefasAtivas`
       ).then((response) => {
         if (response.status === 200) {
-          if (parseInt(response.data.qtd) > 0) {
+          console.log(response.data.qtdTarefasAtivas);
+          if (parseInt(response.data.qtdTarefasAtivas) > 0) {
             setMsgAlerts(
               "O projeto ainda possui " +
-                response.data.qtd +
+                response.data.qtdTarefasAtivas +
                 " tarefas em andamento!"
             );
             setAbreNaoPode(true);
@@ -236,10 +229,10 @@ const ProjetosDetalhar = () => {
       `${serverPrefix}/api/projetos/${locationState.projeto.codProjeto}/tarefasAtivas`
     ).then((response) => {
       if (response.status === 200) {
-        if (parseInt(response.data.qtd) > 0) {
+        if (parseInt(response.data.qtdTarefasAtivas) > 0) {
           setMsgAlerts(
             "O projeto ainda possui " +
-              response.data.qtd +
+              response.data.qtdTarefasAtivas +
               " tarefas em andamento!"
           );
           setAbreNaoPode(true);
@@ -286,8 +279,8 @@ const ProjetosDetalhar = () => {
             >
               <Container disableGutters className="tituloDetalha">
                 <Typography
-                  variant="h2"
-                  component="h1"
+                  variant="h3"
+                  component="h3"
                   sx={{ color: "tituloDetalha", fontWeight: "600" }}
                 >
                   {locationState.projeto.nome}
@@ -302,7 +295,7 @@ const ProjetosDetalhar = () => {
                 <Container disableGutters className="detalhaIntegrantetime">
                   <Typography
                     variant="body"
-                    component="h2"
+                    component="h3"
                     sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                   >
                     {locationState.projeto.descricao}
@@ -320,42 +313,48 @@ const ProjetosDetalhar = () => {
                   >
                     <Typography
                       variant="body"
-                      component="h2"
+                      component="h3"
                       sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                     >
                       {"Criado em: "}
                     </Typography>
                     <Typography
                       variant="body"
-                      component="h2"
+                      component="h4"
                       sx={{ color: "subTituloDetalha" }}
                     >
-                      {locationState.projeto.dtcriacao}
+                      {locationState.projeto.dtCriacao}
                     </Typography>
                   </Container>
 
                   <Container disableGutters className="detalhaProjetotime">
                     <Typography
                       variant="body"
-                      component="h2"
+                      component="h3"
                       sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                     >
                       Time Responsável:
-                      <Link
-                        underline="none"
-                        color={"subTituloDetalha"}
-                        sx={{
-                          "&:hover": {
-                            color: "subTituloDetalhaHover",
-                          },
-                        }}
-                        className={"link-underline-transicao"}
-                        onClick={() => {
-                          detalharTime(locationState.projeto.timeresponsavel);
-                        }}
+                      <Typography
+                        variant="body"
+                        component="h4"
+                        sx={{ color: "subTituloDetalha" }}
                       >
-                        &nbsp;{locationState.projeto.nometime}
-                      </Link>
+                        <Link
+                          underline="none"
+                          color={"subTituloDetalha"}
+                          sx={{
+                            "&:hover": {
+                              color: "subTituloDetalhaHover",
+                            },
+                          }}
+                          className={"link-underline-transicao"}
+                          onClick={() => {
+                            detalharTime(locationState.projeto.timeResponsavel);
+                          }}
+                        >
+                          &nbsp;{locationState.projeto.nomeTime}
+                        </Link>
+                      </Typography>
                     </Typography>
                   </Container>
 
@@ -366,22 +365,22 @@ const ProjetosDetalhar = () => {
                   >
                     <Typography
                       variant="body"
-                      component="h2"
+                      component="h3"
                       sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                     >
-                      {locationState.projeto.dtconclusao === null
+                      {locationState.projeto.dtConclusao === null
                         ? "Prazo:"
                         : "Concluído em:"}
                     </Typography>
 
                     <Typography
                       variant="body"
-                      component="h2"
+                      component="h4"
                       sx={{ color: "subTituloDetalha" }}
                     >
-                      {locationState.projeto.dtconclusao === null
-                        ? locationState.projeto.prazo
-                        : locationState.projeto.dtconclusao}
+                      {locationState.projeto.dtConclusao === null
+                        ? locationState.projeto.Prazo
+                        : locationState.projeto.dtConclusao}
                     </Typography>
                   </Container>
                 </Container>
@@ -398,7 +397,7 @@ const ProjetosDetalhar = () => {
                 >
                   <Typography
                     variant="body"
-                    component="h2"
+                    component="h3"
                     sx={{ color: "subTituloDetalha", fontWeight: "500" }}
                   >
                     Iterações:
@@ -418,7 +417,16 @@ const ProjetosDetalhar = () => {
                             unmountOnExit
                           >
                             <ListItem
-                              className={iteracao.nome === "" ? "ocultar" : ""}
+                              className={
+                                iteracao.nome ===
+                                `ITERAÇÃO - ${
+                                  locationState.projeto.nome
+                                    ? locationState.projeto.nome.toUpperCase()
+                                    : ""
+                                }`
+                                  ? "ocultar"
+                                  : ""
+                              }
                               value={iteracao.nome}
                               key={
                                 "ITERA_SLC_" +
