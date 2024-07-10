@@ -71,13 +71,15 @@ const CriarTimePage = () => {
   // ! Declarando variável que controlará o PopUp de Inativar usuário...
   const [sair, setSair] = React.useState(false);
   const [mensagem, setMensagem] = React.useState(false);
+  const [redir, setRedir] = React.useState(false);
 
   // ! Função que fecha o dialog aberto e redireciona de volta a tela de novo time
   const fecharDialog = () => {
     setSair(false);
-    redirect(
-      "/times" //, { state: { admin: true, usuario: locationState.usuario } }
-    );
+    if (redir === true)
+      redirect(
+        "/times" //, { state: { admin: true, usuario: locationState.usuario } }
+      );
   };
 
   // ! Definindo variável (um array de objetos) que vai receber todos os usuários do sistema
@@ -171,7 +173,7 @@ const CriarTimePage = () => {
         console.log(respostaCriaTime);
 
         Axios.post(
-          `${serverPrefix}/api/times/${respostaCriaTime.data}/usuarios`,
+          `${serverPrefix}/api/times/${respostaCriaTime.data.idTime}/usuarios`,
           {
             listaUsuarios: listaIntegrantes,
           }
@@ -184,6 +186,7 @@ const CriarTimePage = () => {
           document.getElementById("nome-time").value + " criado com sucesso!"
         );
         setSair(true);
+        setRedir(true);
       });
     }
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import "./stylesAlteraTime.css";
 
@@ -37,9 +37,6 @@ import PopupOKPersonalizado from "../../../components/PopupOKPersonalizado";
 //import { buscarTodosUsuarios } from '../../functions/UsuariosFunctions';
 
 const AlterarTimePage = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -178,6 +175,10 @@ const AlterarTimePage = () => {
       codTime: time.codTime,
       listaUsuarios: [integranteSelecionado],
     }).then((respostaCriaUsuarios) => {
+      if (respostaCriaUsuarios.data.message) {
+        setAbreAdd(true);
+        setMsgAlerts(respostaCriaUsuarios.data.message);
+      }
       console.log(respostaCriaUsuarios);
       //TERIA QUE VERIFICAR SE TA ADICIONANDO MESMO...
       retornarTime(time.codTime);
@@ -192,7 +193,11 @@ const AlterarTimePage = () => {
       codTime: time.codTime,
       usuario: integrante.email,
     }).then((respostaDeleteUsuarios) => {
-      console.log(respostaDeleteUsuarios);
+      if (respostaDeleteUsuarios.data.message) {
+        setAbreRemove(true);
+        setMsgAlerts(respostaDeleteUsuarios.data.message);
+        return;
+      }
       //TERIA QUE VERIFICAR SE TA ADICIONANDO MESMO...
       retornarTime(time.codTime);
       setAbreRemove(true);

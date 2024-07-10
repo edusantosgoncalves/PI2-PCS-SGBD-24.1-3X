@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import "./stylesDetalharTarefas.css";
 
@@ -55,33 +55,36 @@ function TarefasDetalhar() {
 
   // ! OnLoad event -> Lendo se houve acesso negado antes da página carregar por completo!
   React.useEffect(() => {
-    // Validando se há dados no localstorage
-    if (
-      localStorage.hasOwnProperty("admin") === false ||
-      localStorage.hasOwnProperty("usuario") === false ||
-      localStorage.hasOwnProperty("tarefa") === false
-    ) {
-      redirect("/?acesso=" + 0);
-      return;
-    }
+    (async function () {
+      // Validando se há dados no localstorage
+      if (
+        localStorage.hasOwnProperty("admin") === false ||
+        localStorage.hasOwnProperty("usuario") === false ||
+        localStorage.hasOwnProperty("tarefa") === false
+      ) {
+        redirect("/?acesso=" + 0);
+        return;
+      }
 
-    // Pegando dados do localStorage
-    let adminLS = localStorage.getItem("admin");
-    let usuarioLS = JSON.parse(localStorage.getItem("usuario"));
-    let tarefaLS = JSON.parse(localStorage.getItem("tarefa"));
+      // Pegando dados do localStorage
+      let adminLS = localStorage.getItem("admin");
+      let usuarioLS = JSON.parse(localStorage.getItem("usuario"));
+      let tarefaLS = JSON.parse(localStorage.getItem("tarefa"));
 
-    //Atribuindo-os a locationState
-    getTarefa(tarefaLS.codTarefa, usuarioLS, adminLS);
-    //setLocationState({ admin: adminLS, usuario: usuarioLS, tarefa: tarefaLS })
+      //Atribuindo-os a locationState
+      await getTarefa(tarefaLS.idTarefa, usuarioLS, adminLS);
+      //setLocationState({ admin: adminLS, usuario: usuarioLS, tarefa: tarefaLS })
 
-    // ! Se for uma tarefa do usuario logado, marque a variavel como verdadeira
-    if (tarefaLS.usuarioResp === usuarioLS.email) {
-      setETarefaDoUsuario(true);
-    }
+      // ! Se for uma tarefa do usuario logado, marque a variavel como verdadeira
+      if (tarefaLS.usuarioResp === usuarioLS.codUsuario) {
+        setETarefaDoUsuario(true);
+        console.log("MINHA TAREFA");
+      }
 
-    // ! Buscando comentários da tarefa e verificando se ela é seguida pelo usuário locago
-    getComentarios(tarefaLS.codTarefa);
-    vrfTarefaESeguida(tarefaLS.codTarefa, usuarioLS.email);
+      // ! Buscando comentários da tarefa e verificando se ela é seguida pelo usuário locago
+      await getComentarios(tarefaLS.idTarefa);
+      await vrfTarefaESeguida(tarefaLS.idTarefa, usuarioLS.email);
+    })();
   }, []);
 
   // ! Declarando variável que receberá se a tarefa é do usuário ou não.
@@ -90,9 +93,11 @@ function TarefasDetalhar() {
   // ! Declarando variavel que receberá todas as tarefas do sistema
   const [listaComentarios, setListaComentarios] = React.useState([
     {
-      codComentarios: "",
+      codComentario: "",
       dtCriacao: "",
       descricao: "",
+      nomeUsuario: "",
+      urlImagemUsuario: "",
     },
   ]);
 
@@ -125,8 +130,9 @@ function TarefasDetalhar() {
     Axios.put(`${serverPrefix}/api/tarefas/${tarefa}/seguida`, {
       email: usuario,
     }).then((response) => {
-      if (response.status === 200) setTarefaESeguida(true);
-      else setTarefaESeguida(false);
+      setTarefaESeguida(response.data);
+      /*if (response.status === 200) setTarefaESeguida(true);
+      else setTarefaESeguida(false);*/
     });
   };
 
@@ -145,7 +151,7 @@ function TarefasDetalhar() {
     Axios.put(
       `${serverPrefix}/api/usuarios/${locationState.usuario.email}/tarefa/parar-seguir`,
       {
-        codTarefa: locationState.tarefa.codTarefa,
+        codTarefa: locationState.tarefa.idTarefa,
       }
     ).then((response) => {
       if (response.status === 200) {
@@ -161,7 +167,7 @@ function TarefasDetalhar() {
     Axios.put(
       `${serverPrefix}/api/usuarios/${locationState.usuario.email}/tarefa/seguir`,
       {
-        codTarefa: locationState.tarefa.codTarefa,
+        codTarefa: locationState.tarefa.idTarefa,
       }
     ).then((response) => {
       if (response.status === 200) {
@@ -191,9 +197,8 @@ function TarefasDetalhar() {
   const [msgAlerts, setMsgAlerts] = React.useState("");
   // ! Função que insere um comentário na tarefa
   const inserirComentario = () => {
-    console.log(locationState.tarefa.codTarefa);
     Axios.put(
-      `${serverPrefix}/api/tarefas/${locationState.tarefa.codTarefa}/addcomentario`,
+      `${serverPrefix}/api/tarefas/${locationState.tarefa.idTarefa}/addcomentario`,
       {
         descricao: document.getElementById("txt_comentario").value,
         email: locationState.tarefa.usuarioResp,
@@ -201,11 +206,11 @@ function TarefasDetalhar() {
     ).then((response) => {
       if (response.status === 201) {
         Axios.put(
-          `${serverPrefix}/api/tarefas/${locationState.tarefa.codTarefa}/seguidores`,
+          `${serverPrefix}/api/tarefas/${locationState.tarefa.idTarefa}/seguidores`,
           {
             email: locationState.tarefa.usuarioResp,
             acao: "ADD",
-            nomeTarefa: locationState.tarefa.nome,
+            nomeTarefa: locationState.tarefa.nomeTarefa,
             nomeRespTarefa: locationState.tarefa.nomeUsuarioResp,
             comentario: document.getElementById("txt_comentario").value,
           }
@@ -217,7 +222,8 @@ function TarefasDetalhar() {
             setAbreRemove(true);
           }
         });
-        getComentarios(locationState.tarefa.codTarefa);
+        getComentarios(locationState.tarefa.idTarefa);
+        document.getElementById("txt_comentario").value = "";
       }
     });
   };
@@ -226,16 +232,16 @@ function TarefasDetalhar() {
   const concluiTarefa = () => {
     let msg = "";
     Axios.delete(
-      `${serverPrefix}/api/tarefas/${locationState.tarefa.codTarefa}`
+      `${serverPrefix}/api/tarefas/${locationState.tarefa.idTarefa}`
     ).then((response) => {
       if (response.status === 200) {
         msg = "A tarefa foi concluída!";
         Axios.put(
-          `${serverPrefix}/api/tarefas/${locationState.tarefa.codTarefa}/seguidores`,
+          `${serverPrefix}/api/tarefas/${locationState.tarefa.idTarefa}/seguidores`,
           {
             email: locationState.tarefa.usuarioResp,
             acao: "CONC",
-            nomeTarefa: locationState.tarefa.nome,
+            nomeTarefa: locationState.tarefa.nomeTarefa,
             nomeRespTarefa: locationState.tarefa.nomeUsuarioResp,
             comentario: "",
           }
@@ -254,7 +260,6 @@ function TarefasDetalhar() {
   let getTarefa = (id, usuario, admin) => {
     Axios.get(`${serverPrefix}/api/tarefas/${id}`).then((response) => {
       if (response.status === 200) {
-        console.log(response.data);
         setLocationState({
           admin: admin,
           usuario: usuario,
@@ -325,7 +330,7 @@ function TarefasDetalhar() {
             <Grid
               sx={{ maxHeight: "100%", overflow: "auto", marginTop: "1.6em" }}
               item
-              key={"Tarefa_" + locationState.tarefa.codTarefa}
+              key={"Tarefa_" + locationState.tarefa.idTarefa}
               xs={12}
               sm={6}
               md={4}
@@ -349,7 +354,7 @@ function TarefasDetalhar() {
                     variant="h5"
                     sx={{ fontWeight: "900" }}
                   >
-                    {locationState.tarefa.nome}
+                    {locationState.tarefa.nomeTarefa}
                     <Tooltip
                       placement="top"
                       arrow
@@ -423,7 +428,7 @@ function TarefasDetalhar() {
                       color={"black"}
                       className={"link-underline-transicao"} // Se a tarefa for do usuario, aparece normal
                       onClick={() => {
-                        detalharProjeto(locationState.tarefa.codProjeto);
+                        detalharProjeto(locationState.tarefa.idProjeto);
                       }}
                     >
                       {locationState.tarefa.nomeProjeto}
@@ -485,7 +490,7 @@ function TarefasDetalhar() {
                   <Container
                     className={listaComentarios.length === 0 ? "ocultar" : ""}
                     disableGutters
-                    key={"CT_COMENTS_" + locationState.tarefa.codTarefa}
+                    key={"CT_COMENTS_" + locationState.tarefa.idTarefa}
                     sx={{
                       display: "flex",
                       flexDirection: "column", //backgroundColor: '#c5c5c5',
@@ -497,9 +502,9 @@ function TarefasDetalhar() {
                     {listaComentarios.map((comentario) => {
                       return (
                         <Chip
-                          avatar={<Avatar src={comentario.urlImagem} />}
+                          avatar={<Avatar src={comentario.urlImagemUsuario} />}
                           label={
-                            comentario.nome +
+                            comentario.nomeUsuario +
                             " - " +
                             comentario.dtCriacao +
                             ":\n" +
@@ -562,23 +567,6 @@ function TarefasDetalhar() {
                   Voltar
                 </Button>
 
-                {/* {
-                                    !(eTarefaDoUsuario) && tarefaESeguida ?
-                                        <Button className="botaoAlterar" variant="contained" color="error"
-                                            sx={{ display: 'flex' }} startIcon={<FaRegTimesCircle />}
-                                            onClick={deixarDeSeguirTarefa}
-                                        >
-                                            DEIXAR DE SEGUIR
-                                        </Button>
-                                        :
-                                        <Button className="botaoAlterar" variant="contained" color="warning"
-                                            sx={{ display: 'flex' }} startIcon={<FaRegCheckCircle />}
-                                            onClick={seguirTarefa}
-                                        >
-                                            SEGUIR
-                                        </Button>
-                                } */}
-
                 <Button
                   className={
                     eTarefaDoUsuario
@@ -606,7 +594,7 @@ function TarefasDetalhar() {
                   }
                   variant="contained"
                   color="warning"
-                  sx={{ display: "flex" }}
+                  //sx={{ display: "flex" }}
                   startIcon={<FaRegCheckCircle />}
                   onClick={seguirTarefa}
                 >
