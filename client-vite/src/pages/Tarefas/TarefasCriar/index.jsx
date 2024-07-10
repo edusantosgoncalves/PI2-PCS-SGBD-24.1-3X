@@ -19,7 +19,6 @@ import {
   CssBaseline,
   Select,
   MenuItem,
-  Autocomplete,
 } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { FaHandPointLeft } from "react-icons/fa";
@@ -98,9 +97,9 @@ const CriarTarefaPage = () => {
 
   // ! Buscando todos os usuários do bd para preencher a tabela.
   const getIteracoes = (codProjeto) => {
-    console.log("CodProj IT _" + codProjeto);
     Axios.get(`${serverPrefix}/api/projetos/${codProjeto}/iteracoes`).then(
       (response) => {
+        console.log(response.data);
         setIteracaoSelecionada("");
         setListaIteracoes(response.data);
       }
@@ -148,7 +147,6 @@ const CriarTarefaPage = () => {
       return;
     }
 
-    console.log(proj);
     setProjetoSelecionado(proj);
     getUsuarios(proj.codProjeto);
     getIteracoes(proj.codProjeto);
@@ -193,7 +191,6 @@ const CriarTarefaPage = () => {
     }
 
     // ! verificar também se tem usuario e iteração selecionados!!!
-    console.log(usuarioSelecionado);
     if (usuarioSelecionado.hasOwnProperty("email") === false) {
       setAbreNaoPode(true);
       setMsgAlerts("A seleção de um usuário é obrigatória!");
@@ -221,7 +218,7 @@ const CriarTarefaPage = () => {
         nome: document.getElementById("nome-tarefa").value,
         descricao: document.getElementById("txt-descricao").value,
         status: statusCodSlc,
-        codIteracaoFK: iteracaoSelecionada.codIteracao,
+        idIteracao: iteracaoSelecionada.codIteracao,
         usuarioResp: usuarioSelecionado.email,
       }).then((respostaCriaTarefa) => {
         console.log(respostaCriaTarefa);

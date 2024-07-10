@@ -89,8 +89,7 @@ const DetalharTimePage = () => {
   const retornarTime = (codTime) => {
     Axios.get(`${serverPrefix}/api/time/${codTime}`)
       .then((resposta) => {
-        //console.log(resposta.data);
-        console.log(resposta.data.usuarios);
+        console.log(resposta.data.projetos);
         setListaIntegrantes(resposta.data.usuarios);
         setListaProjetos(resposta.data.projetos);
 
@@ -219,7 +218,7 @@ const DetalharTimePage = () => {
       Axios.get(`${serverPrefix}/api/projetos/` + codProjeto).then(
         (response) => {
           if (response.status === 200) {
-            //Setando projeto no localStorage
+            // . Setando projeto no localStorage
             localStorage.setItem("projeto", JSON.stringify(response.data));
 
             redirect(
@@ -239,6 +238,7 @@ const DetalharTimePage = () => {
       return <Avatar alt={"AVT_" + email} src={urlImagem} />;
     }
   };
+
   return (
     <>
       <CssBaseline />
@@ -284,71 +284,30 @@ const DetalharTimePage = () => {
                   >
                     Integrantes
                   </Typography>
-                  {listaIntegrantes.map(
-                    (integrante, index) => (
-                      // if (integrante.email !== locationState.usuario.email) {
-                      //     return
-                      <Fade in={true} timeout={(index + 1) * 500} key={index}>
-                        <Chip
-                          key={"INT_CHIP_" + integrante.email}
-                          label={integrante.nome}
-                          sx={{
-                            justifyContent: "left",
-                            paddingBottom: "0.2em",
-                            margin: "0.2em",
-                            "&:hover": {
-                              backgroundColor: "rgba(0, 0, 0, 0.2)",
-                            },
-                          }}
-                          onClick={() => detalharUsuario(integrante.email)}
-                          avatar={retornaAvatar(
-                            integrante.urlImagem,
-                            integrante.email,
-                            integrante.nome
-                          )}
-                        />
-                      </Fade>
-                    )
-                    // }
-                    // else {
-                    //     return <Fade in={true} timeout={(index + 1) * 500} key={index}>
-                    //         <Chip
-                    //             key={"INT_CHIP_" + integrante.email}
-                    //             label={integrante.nome}
-                    //             sx={{
-                    //                 justifyContent: 'left',
-                    //                 paddingBottom: '0.2em',
-                    //                 margin: '0.2em',
-                    //                 '&:hover': {
-                    //                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    //                 },
-                    //             }}
-                    //             avatar={retornaAvatar(integrante.urlImagem, integrante.email, integrante.nome)}
-                    //         />
-                    //     </Fade>;
-                    // }
-                  )}
-                  {/*<List className="listaDetalha">
-
-                                        {listaIntegrantes.map((integrante) => (
-                                            <ListItem key={integrante.email} className="itemListaDetalha" sx={{ display: "flex" }}>
-                                                <Link
-                                                    underline="none"
-                                                    color={'black'}
-                                                    sx={{
-                                                        '&:hover': {
-                                                            color: '#61536a',
-                                                        },
-                                                    }}
-                                                    className={"link-underline-transicao"}
-                                                    onClick={() => {
-                                                        detalharUsuario(integrante.email)
-                                                    }}>
-                                                    {integrante.nome}
-                                                </Link>
-                                            </ListItem>
-                                        ))}
-                                                </List>*/}
+                  {listaIntegrantes.map((integrante, index) => (
+                    // if (integrante.email !== locationState.usuario.email) {
+                    //     return
+                    <Fade in={true} timeout={(index + 1) * 500} key={index}>
+                      <Chip
+                        key={"INT_CHIP_" + integrante.email}
+                        label={integrante.nome}
+                        sx={{
+                          justifyContent: "left",
+                          paddingBottom: "0.2em",
+                          margin: "0.2em",
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 0, 0, 0.2)",
+                          },
+                        }}
+                        onClick={() => detalharUsuario(integrante.email)}
+                        avatar={retornaAvatar(
+                          integrante.urlImagem,
+                          integrante.email,
+                          integrante.nome
+                        )}
+                      />
+                    </Fade>
+                  ))}
                 </Container>
                 <Container disableGutters className="detalhaProjetotime">
                   <Typography
@@ -373,26 +332,6 @@ const DetalharTimePage = () => {
                       />
                     </Fade>
                   ))}
-                  {/*<List className="listaDetalha">
-                                        {listaProjetos.map((projeto) => (
-                                            <ListItem key={projeto.codProjeto} className="itemListaDetalha" sx={{ display: "flex" }}>
-                                                <Link
-                                                    underline="none"
-                                                    color={'white'}
-                                                    sx={{
-                                                        '&:hover': {
-                                                            color: '#61536a',
-                                                        },
-                                                    }}
-                                                    className={"link-underline-transicao"}
-                                                    onClick={() => {
-                                                        detalharProjeto(projeto.codProjeto)
-                                                    }}>
-                                                    {projeto.nome}
-                                                </Link>
-                                            </ListItem>
-                                        ))}
-                                                </List>*/}
                 </Container>
               </Container>
             </Box>

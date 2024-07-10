@@ -506,40 +506,6 @@ const TarefasMinhas = () => {
                       </Tooltip>
                     </Box>
                   </Grow>
-                  /*<Grid sx={{ maxHeight: '100%', overflow: 'auto', width: '30%', margin: '0.5em' }} item key={"Tarefa_" + tarefa.codTarefa} xs={12} sm={6} md={4} >
-                                        <Card
-                                            sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                                        >
-                                            <CardContent className="cardTimes" sx={{ flexGrow: 1, backgroundColor: corStatus[parseInt(tarefa.status)] }} >
-                                                <Link
-                                                    underline="none"
-                                                    sx={{ color: 'black', cursor: 'pointer' }}
-                                                    onClick={() => {
-                                                        detalharTarefa(tarefa)
-                                                    }}>
-                                                    <Typography
-                                                        gutterBottom
-                                                        variant="h5"
-                                                        component="h2"
-                                                        className="links"
-                                                        sx={{ fontWeight: '700' }}
-                                                    >
-                                                        {tarefa.nome}
-                                                    </Typography>
-                                                </Link>
-
-                                                <Typography
-                                                    gutterBottom
-                                                    variant="h6"
-                                                    component="h6"
-                                                    //className="links"
-                                                    sx={{ fontWeight: '400' }}
-                                                >
-                                                    {tarefa.descricao}
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </Grid>*/
                 );
               })}
             </Container>

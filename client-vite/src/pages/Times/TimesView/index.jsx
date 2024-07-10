@@ -38,9 +38,6 @@ import BarraLogo from "../../../components/BarraLogo";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const TimesView = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
