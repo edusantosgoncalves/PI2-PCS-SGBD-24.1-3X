@@ -7,7 +7,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme, ThemeProvider } from '@mui/material/styles';
-
 import MuiEstilosPersonalizados from "./MuiEstilosPersonalizados";
 
 function PopupOKPersonalizado(props) {
