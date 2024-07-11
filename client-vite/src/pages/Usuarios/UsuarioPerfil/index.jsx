@@ -35,13 +35,9 @@ import BarraLogo from "../../../components/BarraLogo";
 import MenuLateral from "../../../components/MenuLateral";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 import PopupOKPersonalizado from "../../../components/PopupOKPersonalizado";
-import BarraLogoSemAuth from "../../../components/BarraLogoSemAuth";
 import { Container } from "@mui/system";
 
 const UsuarioPerfil = () => {
-  // ! Instanciando o useLocation para receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -120,29 +116,41 @@ const UsuarioPerfil = () => {
 
   //! Função que verifica se a tarefa é seguida pelo usuario
   const vrfUsuarioESeguido = (emailUsuarioLogado, usuarioSeguido) => {
-    console.log(emailUsuarioLogado, usuarioSeguido);
     Axios.get(
-      `${serverPrefix}/api/usuarios/${emailUsuarioLogado}/seguindo/${usuarioSeguido}`
+      `${serverPrefix}/api/usuarios/${emailUsuarioLogado}/seguindo/${usuarioSeguido}`,
+      {
+        validateStatus: function (status) {
+          return status < 500;
+        },
+      }
     ).then((response) => {
       setVrfSeguido(true);
-      console.log("VERIFIQUEI SIM!!!");
-      console.log(response);
-      if (response.data.hasOwnProperty("status")) {
-        if (response.data.status === 200) {
-          setUsuarioESeguido(true);
-        } else {
-          setUsuarioESeguido(false);
-        }
+      if (response.data === true) {
+        setUsuarioESeguido(true);
+      } else {
+        setUsuarioESeguido(false);
       }
     });
   };
 
   // ! Função que deixará de seguir o usuario
   const deixardeSeguirUsuario = () => {
+    // Verificando se o usuário existe, se nao, recusa
+    if (usuarioPerfil.email === undefined) {
+      setMsgAlerts("Um dos usuários está inativo ou não existe.");
+      setAbreNaoPode(true);
+      return;
+    }
+
     Axios.put(
-      `${serverPrefix}/api/usuarios/${locationState.usuario.email}//usuario/parar-seguir`,
+      `${serverPrefix}/api/usuarios/${locationState.usuario.email}/usuario/parar-seguir`,
       {
         email: usuarioPerfil.email,
+      },
+      {
+        validateStatus: function (status) {
+          return status < 500;
+        },
       }
     ).then((response) => {
       if (response.status === 200) {
@@ -156,39 +164,45 @@ const UsuarioPerfil = () => {
   // ! Variável que controlará o valor da avaliação
   const [avaliacao, setAvaliacao] = React.useState(0);
 
-  // ! Função que adicionará o valor da avaliação do usuário
-  // const alteraAvaliacao = (aval) => {
-  //     setAvaliacao(aval);
-  // }
-
-  // ! Função que verifica se o usuário está no próprio perfil
-  const vrfUsuarioProprioPerfil = (eu, outro) => {
-    console.log("Verificando se é o mesmo usuário");
-
-    console.log(eu, outro);
-
-    if (eu === outro) {
-      console.log("É o mesmo usuário");
-      setUsuarioProprioPerfil(true);
-    }
-    console.log("Não é o mesmo usuário");
-  };
-
   // ! Variável que diz se o usuário está no próprio perfil
   const [usuarioProprioPerfil, setUsuarioProprioPerfil] = React.useState(false);
 
+  // ! Função que verifica se o usuário está no próprio perfil
+  const vrfUsuarioProprioPerfil = (eu, outro) => {
+    setUsuarioProprioPerfil(eu === outro);
+  };
+
   // ! Função que seguirá o usuario
   const seguirUsuario = () => {
+    // Verificando se o usuário existe, se nao, recusa
+    if (usuarioPerfil.email === undefined) {
+      setMsgAlerts("Um dos usuários está inativo ou não existe.");
+      setAbreNaoPode(true);
+      return;
+    }
+
     Axios.put(
       `${serverPrefix}/api/usuarios/${locationState.usuario.email}/usuario/seguir`,
       {
         email: usuarioPerfil.email,
+      },
+      {
+        validateStatus: function (status) {
+          return status < 500;
+        },
       }
     ).then((response) => {
-      if (response.status === 200) {
-        setUsuarioESeguido(true);
-        setSair(true);
-        setMensagem("O usuario começou a ser seguido!");
+      switch (response.status) {
+        case 200:
+        case 201:
+          setUsuarioESeguido(true);
+          setSair(true);
+          setMensagem("O usuario começou a ser seguido!");
+          break;
+        case 404:
+          setMsgAlerts("Um dos usuários está inativo ou não existe.");
+          setAbreNaoPode(true);
+          return;
       }
     });
   };
@@ -197,19 +211,21 @@ const UsuarioPerfil = () => {
 
   // ! Funções para buscar avaliações
   const buscarAvs = (email) => {
-    Axios.get(`${serverPrefix}/api/usuarios/${email}/avaliacoes-recebidas`)
-      .catch((error) => {
-        if (error.response.data !== "Usuário não encontrado") {
-          console.log(avs.length);
-          setMsgAlerts(error.response.data);
-          setAbreNaoPode(true);
-        }
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setAvs(response.data);
-        }
-      });
+    Axios.get(`${serverPrefix}/api/usuarios/${email}/avaliacoes-recebidas`, {
+      validateStatus: function (status) {
+        return status < 500;
+      },
+    }).then((response) => {
+      if (response.status === 404) {
+        setMsgAlerts("Um dos usuários está inativo ou não existe.");
+        setAbreNaoPode(true);
+        return;
+      }
+      if (response.data.length > 0) {
+        // Se forem obtidas avaliações, atualiza o estado
+        setAvs(response.data);
+      }
+    });
   };
 
   // ! Voltar para a página anterior.
@@ -219,6 +235,14 @@ const UsuarioPerfil = () => {
 
   // ! Função que deixará de seguir o usuario
   const avaliarUsuario = () => {
+    // Verificando se o usuário existe, se nao, recusa
+    if (usuarioPerfil.email === undefined) {
+      setMsgAlerts("Um dos usuários está inativo ou não existe.");
+      setAbreNaoPode(true);
+      return;
+    }
+
+    // Se não houver avaliação, recusa
     if (avaliacao == 0) {
       setMsgAlerts(
         "Avaliação inválida, por favor, selecione ao menos uma estrela!"
@@ -233,12 +257,24 @@ const UsuarioPerfil = () => {
         email: usuarioPerfil.email,
         avaliacao: avaliacao,
         comentario: document.getElementById("avaliacao-comm").value,
+      },
+      {
+        validateStatus: function (status) {
+          return status < 500;
+        },
       }
     ).then((response) => {
-      if (response.status === 201) {
-        document.getElementById("avaliacao-comm").value = "";
-        buscarAvs(usuarioPerfil.email);
-        setAvaliacao(0);
+      switch (response.status) {
+        case 200:
+        case 201:
+          document.getElementById("avaliacao-comm").value = "";
+          buscarAvs(usuarioPerfil.email);
+          setAvaliacao(0);
+          break;
+        case 404:
+          setMsgAlerts("Um dos usuários está inativo ou não existe.");
+          setAbreNaoPode(true);
+          return;
       }
     });
   };
@@ -332,6 +368,7 @@ const UsuarioPerfil = () => {
                     fontWeight: "500",
                     fontFamily: ["Tajawal", "sans-serif"].join(","),
                     margin: "0 1em 0 1em",
+                    visibility: usuarioPerfil.linkedin ? "visible" : "hidden",
                   }}
                 >
                   <a
@@ -372,6 +409,7 @@ const UsuarioPerfil = () => {
                     fontWeight: "500",
                     fontFamily: ["Tajawal", "sans-serif"].join(","),
                     margin: "0 1em 0 1em",
+                    visibility: usuarioPerfil.github ? "visible" : "hidden",
                   }}
                 >
                   <a
@@ -601,7 +639,7 @@ const UsuarioPerfil = () => {
                           }}
                           color="texto.descricao"
                         >
-                          {avaliacao.comentario}
+                          {avaliacao.descricao}
                         </Typography>
                       </CardContent>
                     </Card>

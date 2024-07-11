@@ -110,7 +110,6 @@ const UsuarioCriar = () => {
   const buscarMinhasAvs = (email) => {
     Axios.get(`${serverPrefix}/api/usuarios/${email}/avaliacoes-recebidas`)
       .then((response) => {
-        console.log(response.data);
         if (response.status >= 200 && response.status <= 300) {
           setAvMinhas(response.data);
           setAvMostrar(response.data);
@@ -118,7 +117,6 @@ const UsuarioCriar = () => {
         }
       })
       .catch((erro) => {
-        console.log(erro);
         setAbreNaoPode(true);
         setMsgAlerts(erro.response.data);
         setJaCarregou(true);
@@ -132,12 +130,12 @@ const UsuarioCriar = () => {
         setJaCarregou(true);
       })
       .catch((erro) => {
-        console.log(erro);
         setAbreNaoPode(true);
         setMsgAlerts(erro.response.data);
         setJaCarregou(true);
       });
   };
+
   return (
     <>
       <div className="Usuarios-ADM">

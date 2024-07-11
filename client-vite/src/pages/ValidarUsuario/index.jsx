@@ -10,8 +10,7 @@ import { serverPrefix } from "../../configs/urlPrefixes";
 //Imports de componentes criados
 import BarraLogoSemAuth from "../../components/BarraLogoSemAuth";
 
-//IMPORT CHAKRA UI
-//import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
+//IMPORT MUI
 import {
   Backdrop,
   CircularProgress,
@@ -30,23 +29,25 @@ const ValidarUsuario = () => {
 
   //! Função que valida o usuário no banco e conforme a resposta do status, redireciona a página indicada
   const vrfUsuario = () => {
+    // . Pegando a localização da página
     const location = window.location.href;
 
-    // * The current location.
-    console.log(location);
-
-    //Transformando localização em url e buscando parametros;
+    // . Transformando localização em url e buscando parametros;
     let url = new URL(location);
     let params = new URLSearchParams(url.search);
 
-    console.log(params.get("nome").toString());
+    // . Atualizando dados do usuário no banco
     Axios.put(
       `${serverPrefix}/api/usuarios/${params.get("email").toString()}/valida`,
       {
         urlImagem: params.get("foto").toString(),
         nome: params.get("nome").toString(),
       },
-      { validateStatus: false }
+      {
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if the status code is less than 500
+        },
+      }
     ).then((response) => {
       if (response.status !== 201) {
         redirect("/?acesso=" + 0);
@@ -62,42 +63,32 @@ const ValidarUsuario = () => {
             delay(3000).then(() => {
               localStorage.setItem("usuario", JSON.stringify(response.data));
               localStorage.setItem("admin", false);
-              redirect(
-                "/cadastro" //, { state: { usuario: response.data, admin: false } }
-              );
+              redirect("/cadastro");
             });
             break;
           case 2:
             delay(3000).then(() => {
               localStorage.setItem("usuario", JSON.stringify(response.data));
               localStorage.setItem("admin", true);
-              redirect(
-                "/cadastro" //, { state: { usuario: response.data, admin: true } }
-              );
+              redirect("/cadastro");
             });
             break;
           case 3:
-            console.log(response.data);
             delay(3000).then(() => {
               localStorage.setItem("usuario", JSON.stringify(response.data));
               localStorage.setItem("admin", false);
-              redirect(
-                "/home" //, { state: { usuario: response.data, admin: true } }
-              );
+              redirect("/home");
             });
             break;
           case 4:
-            console.log(response.data);
             delay(3000).then(() => {
               localStorage.setItem("usuario", JSON.stringify(response.data));
               localStorage.setItem("admin", true);
-              redirect(
-                "/home" //, { state: { usuario: response.data, admin: true } }
-              );
+              redirect("/home");
             });
             break;
           default:
-            //REDIRECIONAR PRA PAGINA DE SEM ACESSO!
+            // . REDIRECIONAR PRA PAGINA DE SEM ACESSO!
             delay(3000).then(redirect("/?acesso=" + 0));
             break;
         }
@@ -127,9 +118,7 @@ const ValidarUsuario = () => {
                 justifyContent: "center",
               }}
             >
-              <CircularProgress // color="verde"
-                sx={{ color: "#CDC1F8" }}
-              />
+              <CircularProgress sx={{ color: "#CDC1F8" }} />
               <div className="txtValidar">
                 Validando informações do usuário...
               </div>
@@ -137,15 +126,6 @@ const ValidarUsuario = () => {
           </Backdrop>
         </ThemeProvider>
       </div>
-      {/*<BarraLogoSemAuth> </BarraLogoSemAuth>
-
-            <div className="divValida">
-                <CircularProgress isIndeterminate color='purple' />
-                <div className="txtValidar">
-                    Validando informações do usuário...
-                </div>
-
-    </div>*/}
     </div>
   );
 };

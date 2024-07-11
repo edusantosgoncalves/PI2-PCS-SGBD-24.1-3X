@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import "./stylesUsuarioAlt.css";
 
@@ -159,43 +159,46 @@ const UsuarioAlterar = () => {
       });
       return;
     }
+
     //! Validando se usuário já existe
     Axios.get(
       `${serverPrefix}/api/usuarios/${document
         .getElementById("email")
-        .value.trim()}`
-    )
-      .then((response) => {
-        // ! Se o usuário não existir, crie
-        if (response.data.hasOwnProperty("message")) {
-          if (response.data.message === "Usuário não encontrado") {
-            Axios.put(
-              `${serverPrefix}/api/usuarios-adm/${locationState.usuarioAlterar.email}`,
-              {
-                emailNovo: document.getElementById("email").value,
-                funcao: document.getElementById("funcao").value,
-                status: eAdmin ? 2 : 1, //Se for selecionado no checkbox admin, defina o status como 2, senão, defina como 1
-              }
-            ).then((response) => {
-              setSair(true);
-              setMensagem(
-                (locationState.usuarioAlterar.nome ?? "Usuário ") +
-                  " alterado com sucesso!"
-              );
-            });
+        .value.trim()}`,
+      {
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if the status code is less than 500
+        },
+      }
+    ).then((response) => {
+      // ! Se o usuário não existir, altere
+      if (response.status === 404) {
+        Axios.put(
+          `${serverPrefix}/api/usuarios-adm/${locationState.usuarioAlterar.email}`,
+          {
+            emailNovo: document.getElementById("email").value,
+            funcao: document.getElementById("funcao").value,
+            status: eAdmin ? 2 : 1, //Se for selecionado no checkbox admin, defina o status como 2, senão, defina como 1
+          },
+          {
+            validateStatus: function (status) {
+              return status < 500; // Resolve only if the status code is less than 500
+            },
           }
-        } else {
-          // ! Se existe, não deixa
-          setMsgAlerts("Novo e-mail já cadastrado!");
-          setAbreNaoPode(true);
-          return;
-        }
-      })
-      .catch((erro) => {
-        setMsgAlerts(erro.response.message.toString());
+        ).then((response) => {
+          setSair(true);
+          setMensagem(
+            (locationState.usuarioAlterar.nome ?? "Usuário ") +
+              " alterado com sucesso!"
+          );
+        });
+      } else {
+        // ! Se existe, não deixa alterar
+        setMsgAlerts("Novo e-mail já cadastrado para outro usuário!");
         setAbreNaoPode(true);
         return;
-      });
+      }
+    });
   };
 
   // ! Função que ativa o usuário selecionado
@@ -204,6 +207,11 @@ const UsuarioAlterar = () => {
       `${serverPrefix}/api/usuarios/${locationState.usuarioAlterar.email}/status`,
       {
         status: eAdmin ? 2 : 1, //Se for selecionado no checkbox admin, defina o status como 2, senão, defina como 1
+      },
+      {
+        validateStatus: function (status) {
+          return status < 300; // Resolve only if the status code is less than 500
+        },
       }
     ).then((response) => {
       setSair(true);
@@ -220,6 +228,11 @@ const UsuarioAlterar = () => {
       `${serverPrefix}/api/usuarios/${locationState.usuarioAlterar.email}/status`,
       {
         status: 5,
+      },
+      {
+        validateStatus: function (status) {
+          return status < 500; // Resolve only if the status code is less than 500
+        },
       }
     ).then((response) => {
       setSair(true); // ! define a aparição do popup de Encerrar Sessão

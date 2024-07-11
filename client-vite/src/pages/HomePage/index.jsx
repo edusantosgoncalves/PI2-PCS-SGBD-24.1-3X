@@ -15,15 +15,12 @@ import {
   Backdrop,
   CircularProgress,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import Axios from "axios";
 import MuiEstilosPersonalizados from "../../components/MuiEstilosPersonalizados";
 
 const HomePage = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando uma variável useState para receber os dados do redirecionamento
   const [locationState, setLocationState] = React.useState({
     admin: "",
@@ -71,7 +68,6 @@ const HomePage = () => {
   const getDashboard = (email, admin) => {
     Axios.get(`${serverPrefix}/api/usuarios/${email}/dashboard/${admin}`).then(
       (response) => {
-        console.log(response.data);
         setDashboard(response.data);
         setJaCarregou(true);
       }
@@ -83,37 +79,27 @@ const HomePage = () => {
 
   // ! Função para levar o usuario logado a pagina de alterar usuario
   const irTimes = () => {
-    redirect("/times", {
-      state: { usuario: locationState.usuario, admin: locationState.admin },
-    });
+    redirect("/times");
   };
 
   // ! Função para levar o usuario logado a pagina de alterar usuario
   const irProjetos = () => {
-    redirect("/projetos", {
-      state: { usuario: locationState.usuario, admin: locationState.admin },
-    });
+    redirect("/projetos");
   };
 
   // ! Função para levar o usuario logado a pagina de usuarios
   const irTarefas = () => {
-    redirect("/tarefas", {
-      state: { usuario: locationState.usuario, admin: locationState.admin },
-    });
+    redirect("/tarefas");
   };
 
   // ! Função para levar o usuario logado a pagina de usuarios
   const irUsuarios = () => {
-    redirect("/usuarios-adm", {
-      state: { usuario: locationState.usuario, admin: locationState.admin },
-    });
+    redirect("/usuarios-adm");
   };
 
   // !
   const irTarefasADM = () => {
-    redirect("/tarefas/adm", {
-      state: { usuario: locationState.usuario, admin: locationState.admin },
-    });
+    redirect("/tarefas/adm");
   };
 
   return (
