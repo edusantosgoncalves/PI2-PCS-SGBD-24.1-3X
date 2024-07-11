@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme, ThemeProvider } from '@mui/material/styles';
 import MuiEstilosPersonalizados from "./MuiEstilosPersonalizados";
-
 import { useNavigate } from 'react-router-dom';
 
 

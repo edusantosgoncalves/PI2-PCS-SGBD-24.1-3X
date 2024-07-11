@@ -1,6 +1,5 @@
 import React from "react";
 import "./stylesAlterar.css";
-
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
