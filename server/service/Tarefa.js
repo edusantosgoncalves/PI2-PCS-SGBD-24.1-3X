@@ -15,15 +15,21 @@ class TarefaService {
 
     if (!tarefa) return false;
 
-    // . Normalizando JSON
-    tarefa["usuarioResp"] = tarefa["Usuario.usuarioResp"];
+    // . Normalizando JSON (formatando campos de usuario, iteração e projeto)
+    tarefa.usuarioResp = tarefa["Usuario.usuarioResp"];
+    tarefa.nomeUsuarioResp = tarefa["Usuario.nomeUsuarioResp"];
+    tarefa.nomeIteracao = tarefa["Iteracao.nomeIteracao"];
+    tarefa.idProjeto = tarefa["Iteracao.Projeto.projetoTarefa"];
+    tarefa.nomeProjeto = tarefa["Iteracao.Projeto.nomeProjeto"];
+    tarefa.nomeTarefa = tarefa["nome"];
+
+    // . Removendo campos desnecessários
     delete tarefa["Usuario.usuarioResp"];
-
-    tarefa["nomeUsuarioResp"] = tarefa["Usuario.nomeUsuarioResp"];
     delete tarefa["Usuario.nomeUsuarioResp"];
-
-    tarefa["urlImagemUsuarioResp"] = tarefa["Usuario.urlImagem"];
-    delete tarefa["Usuario.urlImagem"];
+    delete tarefa["Iteracao.nomeIteracao"];
+    delete tarefa["Iteracao.Projeto.projetoTarefa"];
+    delete tarefa["Iteracao.Projeto.nomeProjeto"];
+    delete tarefa["nome"];
 
     return tarefa;
   }
@@ -33,7 +39,7 @@ class TarefaService {
     nome,
     descricao,
     status,
-    codIteracaoFK,
+    idIteracao,
     usuarioResp
   ) {
     const usuario = await UsuarioRepository.getUserIdByEmailForActiveUser(
@@ -50,13 +56,13 @@ class TarefaService {
       nome,
       descricao,
       status,
-      codIteracaoFK,
+      idIteracao,
       usuario.idUsuario
     );
     return tarefa;
   }
 
-  static async addTarefa(nome, descricao, status, codIteracaoFK, usuarioResp) {
+  static async addTarefa(nome, descricao, status, idIteracao, usuarioResp) {
     const usuario = await UsuarioRepository.getUserIdByEmailForActiveUser(
       usuarioResp
     );
@@ -70,7 +76,7 @@ class TarefaService {
       nome,
       descricao,
       status,
-      codIteracaoFK,
+      idIteracao,
       usuario.idUsuario
     );
     return tarefa;
@@ -196,7 +202,7 @@ class TarefaService {
     return true;
   }
 
-  static async addComentario(id, descricao, email) {
+  static async addComentario(idTarefa, descricao, email) {
     const usuario = await UsuarioRepository.getUserIdByEmailForActiveUser(
       email
     );
@@ -207,7 +213,7 @@ class TarefaService {
     }
 
     const comentario = await TarefaRepository.addComentario(
-      id,
+      idTarefa,
       descricao,
       usuario.idUsuario
     );

@@ -1,6 +1,6 @@
 import React from "react";
 import "./stylesTarefas.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
 // Imports MUI e Joy
@@ -25,9 +25,6 @@ import MenuLateral from "../../../components/MenuLateral";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const TarefasAdm = () => {
-  // ! Instanciando o useLocation para receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando uma variável useState para receber os dados do redirecionamento
   const [locationState, setLocationState] = React.useState({
     admin: "",
@@ -98,7 +95,7 @@ const TarefasAdm = () => {
   // ! Buscando todas as tarefas do sistema..
   const getTarefas = () => {
     Axios.get(`${serverPrefix}/api/tarefas`).then((response) => {
-      // TESTE - console.log(response);
+      console.log(response); // TESTE
       setListaTarefas(response.data);
 
       /* FILTRANDO DADOS DE CADA USUÁRIO PARA PREENCHER A TABELA... */

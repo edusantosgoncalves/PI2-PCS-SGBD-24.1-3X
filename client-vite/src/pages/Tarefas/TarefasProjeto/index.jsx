@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import "./stylesTarefasProj.css";
 
@@ -37,9 +37,6 @@ import BarraLogo from "../../../components/BarraLogo";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const TarefasProjeto = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -73,7 +70,7 @@ const TarefasProjeto = () => {
       projeto: projetoLS,
     });
 
-    getTarefas(projetoLS.codprojeto);
+    getTarefas(projetoLS.codProjeto);
   }, []);
 
   //! Variável que controla se já carregou dados
@@ -122,12 +119,11 @@ const TarefasProjeto = () => {
 
   // ! Declarando função que definirá o projeto escolhido no Select
   const filtrarStatus = (evento, status) => {
-    console.log(status);
     setStatusSelecionado(status.status);
     let nvListaTarefas = [];
 
     //Se não for Todos, faça o filtro...
-    if (!(parseInt(status.status) === -1)) {
+    if (parseInt(status.status) !== -1) {
       // ! Filtrando o status selecionado
       nvListaTarefas = listaTarefas.filter(
         (tarefa) => parseInt(tarefa.status) === parseInt(status.status)
@@ -148,21 +144,6 @@ const TarefasProjeto = () => {
         setListaTarefas(response.data);
         setListaTarefasFiltrada(response.data);
         setJaCarregou(true);
-        /*
-                               // ! Filtrando projetos diferentes das tarefas do usuario
-                               const proj = [...new Map((response.data).map(item =>
-                                   [item["projetoTarefa"], item])).values()];
-               
-                               let projCerto = [{ projetoTarefa: -1, nomeProjeto: 'Todos' }];
-               
-                               for (let i = 0; i < proj.length; i++) {
-                                   console.log(proj[i])
-                                   projCerto.push({ projetoTarefa: proj[i].projetoTarefa, nomeProjeto: proj[i].nomeProjeto });
-                               }
-               
-                               //Definindo todos como padrão nos selects:
-                              /* setStatusSelecionado({ status: -1, descStatus: 'Todos' })
-                                setProjetoSelecionado({ projetoTarefa: -1, nomeProjeto: 'Todos' })*/
       }
     );
   };

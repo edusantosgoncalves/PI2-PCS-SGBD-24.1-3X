@@ -27,9 +27,6 @@ import BarraLogo from "../../../components/BarraLogo";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const UsuarioAdm = () => {
-  // ! Instanciando o useLocation para receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando uma variável useState para receber os dados do redirecionamento
   const [locationState, setLocationState] = React.useState({
     admin: "",
@@ -96,7 +93,6 @@ const UsuarioAdm = () => {
   // ! Buscando todos os usuários do bd para preencher a tabela.
   const getUsuarios = () => {
     Axios.get(`${serverPrefix}/api/usuarios`).then((response) => {
-      // TESTE - console.log(response);
       setListaUsuarios(response.data);
 
       /* FILTRANDO DADOS DE CADA USUÁRIO PARA PREENCHER A TABELA... */
@@ -211,16 +207,12 @@ const UsuarioAdm = () => {
     //Setando usuario no localStorage
     localStorage.setItem("usuarioAlterar", JSON.stringify(usuarioSelecionado));
 
-    redirect(
-      "/usuarios-adm/alterar" //, { state: { usuario: locationState.usuario, admin: locationState.admin, usuarioAlterar: usuarioSelecionado } }
-    );
+    redirect("/usuarios-adm/alterar");
   };
 
   // ! Função para levar o usuário logado a página de criar novo usuário
   const criarNovoUsuario = () => {
-    redirect(
-      "/usuarios-adm/criar" //, { state: { usuario: locationState.usuario, admin: locationState.admin } }
-    );
+    redirect("/usuarios-adm/criar");
   };
 
   // ! Voltar para a página anterior.

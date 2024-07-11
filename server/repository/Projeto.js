@@ -9,7 +9,7 @@ class ProjetoRepository {
   // Validado
   static async get() {
     const query = await sequelize.query(
-      `SELECT * FROM "3x".PROJETOSView ORDER BY ativo DESC`
+      `SELECT codprojeto as "codProjeto", nome, descricao, dtcriacao as "dtCriacao", timeresponsavel as "timeResponsavel", nometime as "nomeTime", dtconclusao as "dtConclusao", prazo as "Prazo", qtdtarefas as "qtdTarefas", qtdtarefasativas as "qtdTarefasAtivas", ativo FROM "3x".PROJETOSView ORDER BY ativo DESC`
     );
 
     return query[0];
@@ -18,14 +18,14 @@ class ProjetoRepository {
   // Validado
   static async getProjetoById(id) {
     let projeto = await sequelize.query(
-      `SELECT * FROM "3x".PROJETOSView WHERE codProjeto = ${id}`
+      `SELECT codprojeto as "codProjeto", nome, descricao, dtcriacao as "dtCriacao", timeresponsavel as "timeResponsavel", nometime as "nomeTime", dtconclusao as "dtConclusao", prazo as "Prazo", qtdtarefas as "qtdTarefas", qtdtarefasativas as "qtdTarefasAtivas", ativo FROM "3x".PROJETOSView WHERE codprojeto = ${id}`
     );
 
     if (projeto[0].length === 0) {
       return false;
     }
 
-    return projeto[0];
+    return projeto[0][0];
   }
 
   // Validado

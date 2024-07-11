@@ -52,6 +52,17 @@ class UsuarioRepository {
   }
 
   // NOVO
+  static async getUserEmailNameAndImageURLById(id) {
+    return await UsuarioModel.findOne({
+      attributes: ["email", "nome", "urlImagem"],
+      where: {
+        idUsuario: id,
+      },
+      raw: true,
+    });
+  }
+
+  // NOVO
   static async getUserEmailById(id) {
     return await UsuarioModel.findOne({
       attributes: ["email"],
@@ -68,6 +79,7 @@ class UsuarioRepository {
       attributes: basicFields,
       where: {
         email: email,
+        status: { [Op.between]: [1, 4] },
       },
       raw: true,
     });
@@ -132,7 +144,9 @@ class UsuarioRepository {
 
   // Validado
   static async userLogin(email, nome, urlImagem) {
-    let user = await UsuarioModel.findOne({ where: { email: email } });
+    let user = await UsuarioModel.findOne({
+      where: { email: email, status: { [Op.between]: [1, 4] } },
+    });
 
     if (!user) return false;
 
@@ -219,7 +233,7 @@ class UsuarioRepository {
     let queryString;
     // id === -1 (todos os projetos)
     if (id === "-1") {
-      queryString = `select * from "3x".projetosview`;
+      queryString = `select codprojeto as "codProjeto", nome, descricao, dtcriacao as "dtCriacao", timeresponsavel as "timeResponsavel", nometime as "nomeTime", dtconclusao as "dtConclusao", prazo as "Prazo", qtdtarefas as "qtdTarefas", qtdtarefasativas as "qtdTarefasAtivas", ativo from "3x".projetosview`;
     } else {
       queryString = `select * from "3x".getProjetosUsuario(${id})`;
     }

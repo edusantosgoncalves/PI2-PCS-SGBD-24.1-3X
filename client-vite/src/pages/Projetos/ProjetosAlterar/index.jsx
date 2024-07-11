@@ -255,7 +255,6 @@ const ProjetosAlterar = () => {
   const getIteracoes = (codProjeto) => {
     Axios.get(`${serverPrefix}/api/projetos/${codProjeto}/iteracoes`).then(
       (response) => {
-        console.log(response.data);
         setListaIteracoes(response.data);
         setJaCarregou(true);
       }
@@ -287,7 +286,7 @@ const ProjetosAlterar = () => {
         dtFim: dtFim,
       }
     ).then((response) => {
-      if (response.status === 201) {
+      if (response.status === 200) {
         getIteracoes(locationState.projeto.codProjeto);
         setSaiItera(false);
         setMsgAlerts("A iteração " + nome + " foi adicionada.");
@@ -338,7 +337,7 @@ const ProjetosAlterar = () => {
       dtFim: dtFim,
     }).then((response) => {
       console.log(response.data);
-      if (response.status === 201) {
+      if (response.status === 200) {
         getIteracoes(locationState.projeto.codProjeto);
         setSaiIteraAlteracao(false);
         setMsgAlerts("A iteração " + nome + " foi atualizada.");
@@ -359,12 +358,12 @@ const ProjetosAlterar = () => {
         Axios.get(
           `${serverPrefix}/api/tarefas-itera/${iteracao.codIteracao}`
         ).then((response) => {
-          if (response.data.qtdTarefas === 0) {
+          if (response.data === 0) {
             //Remove a iteração da tabela...
             Axios.delete(
               `${serverPrefix}/api/projetos/${iteracao.codIteracao}/iteracao`
             ).then((resposta) => {
-              if (resposta.status === 201) {
+              if (resposta.status === 200) {
                 setMsgAlerts("A iteração " + iteracao.nome + " foi removida!");
                 setAbreRemove(true);
 
@@ -378,7 +377,7 @@ const ProjetosAlterar = () => {
           } else {
             setMsgAlerts(
               "A iteração ainda possui " +
-                response.data.qtdTarefas +
+                response.data +
                 " tarefas associadas."
             );
             setAbreNaoPode(true);
@@ -417,7 +416,7 @@ const ProjetosAlterar = () => {
         nome: document.getElementById("nome-projeto").value,
       }).then((respostaValida) => {
         console.log(respostaValida);
-        if (respostaValida.data.valido === true) {
+        if (respostaValida.data === true) {
           setENomeValido(true);
           setLabelNome("Válido!");
         } else {
@@ -435,8 +434,7 @@ const ProjetosAlterar = () => {
   const getDescricao = (codProjeto) => {
     Axios.get(`${serverPrefix}/api/projetos/${codProjeto}/descricao`).then(
       (response) => {
-        document.getElementById("txt-descricao").value =
-          response.data.descricao;
+        document.getElementById("txt-descricao").value = response.data;
       }
     );
   };
@@ -510,6 +508,7 @@ const ProjetosAlterar = () => {
                       marginLeft: "20px",
                       width: "inherit",
                     }}
+                    onChange={validarNome}
                   ></TextField>
                 </Container>
                 <Container
@@ -534,7 +533,9 @@ const ProjetosAlterar = () => {
                       margin: "0.5em 0 0 0",
                     }}
                   >
-                    {labelNome}
+                    {eNomeValido
+                      ? "Válido"
+                      : "Inválido: Nome de projeto já existente"}
                   </Typography>
                 </Container>
 

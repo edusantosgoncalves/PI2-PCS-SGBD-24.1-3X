@@ -51,6 +51,10 @@ module.exports = {
     const { email } = req.params;
 
     const avaliacoes = await UsuarioService.getAvaliacoesParaUsuario(email);
+
+    if (avaliacoes === -2) {
+      return res.status(404).json("Usuário não encontrado");
+    }
     return res.json(avaliacoes);
   },
 
@@ -250,6 +254,29 @@ module.exports = {
       cep,
       numEnd,
       complEnd
+    );
+
+    switch (result) {
+      case false:
+        return res.status(404).json();
+      default:
+        return res.status(201).json(result);
+    }
+  },
+
+  async avaliarUsuario(req, res) {
+    const { email } = req.params;
+    const {
+      email: emailAvaliado,
+      avaliacao: nota,
+      comentario: descricao,
+    } = req.body;
+
+    const result = await UsuarioService.avaliarUsuario(
+      email,
+      emailAvaliado,
+      nota,
+      descricao
     );
 
     switch (result) {

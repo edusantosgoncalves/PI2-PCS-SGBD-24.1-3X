@@ -1,7 +1,7 @@
 import React from "react";
 import "./stylesAlterar.css";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
 // Imports do prefixo da url do servidor
@@ -27,9 +27,6 @@ import MuiEstilosPersonalizados from "../../components/MuiEstilosPersonalizados"
 import PopupOKPersonalizado from "../../components/PopupOKPersonalizado";
 
 const AlterarDadosPage = () => {
-  // ! Instanciando o useLocation para receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -298,8 +295,16 @@ const AlterarDadosPage = () => {
             noValidate
             autoComplete="off"
           >
-            <TextField id="linkedin" label="Linkedin" defaultValue="" />
-            <TextField id="github" label="Github" defaultValue="" />
+            <TextField
+              id="linkedin"
+              label="LinkedIn (link do perfil)"
+              defaultValue=""
+            />
+            <TextField
+              id="github"
+              label="Github (link do perfil)"
+              defaultValue=""
+            />
           </Box>
 
           <div className="areaBtns">

@@ -86,8 +86,8 @@ const TarefasAlterar = () => {
     document.getElementById("nome-tarefa").value = tarefaLS.nome;
     document.getElementById("txt-descricao").value = tarefaLS.descricao;
     setCodProjetoSelecionado(tarefaLS.projetoTarefa);
-    setCodIteracaoSelecionada(tarefaLS.codIteracaoFK);
-    setEmailUsuarioSelecionado(tarefaLS.usuarioResp);
+    setIdIteracaoSelecionada(tarefaLS.idIteracao);
+    setEmailUsuarioSelecionado(tarefaLS.emailUsuarioResp);
 
     //Vrf se é pendente (analisar se podemos deixar condicional uma tarefa ser criada necessariamente com um usuario...)
     switch (tarefaLS.status) {
@@ -108,7 +108,6 @@ const TarefasAlterar = () => {
   const [jaCarregou, setJaCarregou] = React.useState(false);
 
   // ! Definindo variável que vai receber os valores do radioButton
-
   const radioButtons = ["Em andamento", "Concluída", "Inativada"];
 
   // ! Definindo variável (um array de objetos) que vai receber todas as iterações do projeto
@@ -120,22 +119,17 @@ const TarefasAlterar = () => {
   ]);
 
   // ! Adiciona um projeto a uma lista para exibição
-  const [codIteracaoSelecionada, setCodIteracaoSelecionada] =
-    React.useState("");
+  const [idIteracaoSelecionada, setIdIteracaoSelecionada] = React.useState("");
 
   // ! A cada troca de projeto, busque os usuariosRelacionados
   const iteracaoChange = (itera) => {
-    //setIteracaoSelecionada(itera);
-    setCodIteracaoSelecionada(itera.target.value);
+    setIdIteracaoSelecionada(itera.target.value);
   };
 
   // ! Buscando todos os usuários do bd para preencher a tabela.
   const getIteracoes = (codProjeto) => {
-    console.log(document.getElementById("iteracaoSelecionada").value);
-    console.log("CodProj IT _" + codProjeto);
     Axios.get(`${serverPrefix}/api/projetos/${codProjeto}/iteracoes`).then(
       (response) => {
-        console.log(response.data);
         setListaIteracoes(response.data);
         setJaCarregou(true);
       }
@@ -154,7 +148,6 @@ const TarefasAlterar = () => {
   const getUsuarios = (codProjeto) => {
     Axios.get(`${serverPrefix}/api/projetos/${codProjeto}/usuarios`).then(
       (response) => {
-        console.log(response.data);
         setListaUsuarios(response.data);
       }
     );
@@ -165,8 +158,6 @@ const TarefasAlterar = () => {
 
   // ! Adiciona um integrante a uma variável
   const usuarioChange = (usuario) => {
-    //setUsuarioSelecionado(usuario);
-    console.log(usuario);
     setEmailUsuarioSelecionado(usuario.target.value);
   };
 
@@ -182,13 +173,9 @@ const TarefasAlterar = () => {
 
   // ! A cada troca de projeto, busque os usuariosRelacionados
   const projetoChange = (proj) => {
-    console.log(proj);
-    //setCodIteracaoSelecionada(proj.target.value);
     getUsuarios(proj.codProjeto);
     getIteracoes(proj.codProjeto);
     setCodProjetoSelecionado(proj.codProjeto);
-    /*getUsuarios(proj.codProjeto);
-        getIteracoes(proj.codProjeto);*/
   };
 
   const [listaProjetos, setListaProjetos] = React.useState([
@@ -214,14 +201,13 @@ const TarefasAlterar = () => {
     }
 
     // ! verificar também se tem usuario e iteração selecionados!!!
-    console.log(emailUsuarioSelecionado);
     if (emailUsuarioSelecionado === "") {
       setAbreNaoPode(true);
       setMsgAlerts("A seleção de um usuário é obrigatória!");
       return;
     }
 
-    if (codIteracaoSelecionada === "") {
+    if (idIteracaoSelecionada === "") {
       setAbreNaoPode(true);
       setMsgAlerts("A seleção de uma iteração é obrigatória!");
       return;
@@ -230,9 +216,8 @@ const TarefasAlterar = () => {
     // ! Verificando se o usuário selecionado pertence ao time do projeto selecionado
     let vrfUsuarioProjeto = false;
 
-    for (let i = 0; i < listaUsuarios.length; i++) {
-      console.log(listaUsuarios[i]);
-      if (listaUsuarios[i].email === emailUsuarioSelecionado) {
+    for (const usuario of listaUsuarios) {
+      if (usuario.email === emailUsuarioSelecionado) {
         console.log("É!!!");
         vrfUsuarioProjeto = true;
       }
@@ -240,17 +225,16 @@ const TarefasAlterar = () => {
 
     if (vrfUsuarioProjeto === true) {
       Axios.put(
-        `${serverPrefix}/api/tarefas/${locationState.tarefa.codTarefa}`,
+        `${serverPrefix}/api/tarefas/${locationState.tarefa.idTarefa}`,
         {
           nome: document.getElementById("nome-tarefa").value,
           descricao: document.getElementById("txt-descricao").value,
           status: statusCodSlc,
-          codIteracaoFK: codIteracaoSelecionada,
+          idIteracao: idIteracaoSelecionada,
           usuarioResp: emailUsuarioSelecionado,
         }
       ).then((respostaCriaTarefa) => {
         if (respostaCriaTarefa.status === 200) {
-          console.log(respostaCriaTarefa);
           setSair(true);
           setMensagem(
             document.getElementById("nome-tarefa").value + " foi atualizada!"
@@ -260,7 +244,6 @@ const TarefasAlterar = () => {
     } else {
       setAbreNaoPode(true);
       setMsgAlerts("Selecione um usuário pertencente ao projeto selecionado!");
-      return;
     }
   };
 
@@ -360,7 +343,7 @@ const TarefasAlterar = () => {
                     id="iteracaoSelecionada"
                     variant="outlined"
                     sx={{ marginLeft: "20px", width: "50%" }}
-                    value={codIteracaoSelecionada}
+                    value={idIteracaoSelecionada}
                     onChange={(e) => iteracaoChange(e)}
                   >
                     {listaIteracoes.map((itera) => (
@@ -390,7 +373,7 @@ const TarefasAlterar = () => {
                     {listaUsuarios.map((usuario) => (
                       <MenuItem
                         value={usuario.email}
-                        key={"USU_" + usuario.email}
+                        key={"USU_" + usuario.idUsuario}
                         //onClick={() => usuarioChange(usuario)}
                         //selected={usuarioSelecionado === usuario}
                       >

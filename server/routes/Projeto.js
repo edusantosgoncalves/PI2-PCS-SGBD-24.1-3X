@@ -6,6 +6,10 @@ const router = Router();
 // * Definindo as rotas do usuário
 router.get("/api/projetos", projetoController.getProjetos); // . Retorna todos os projetos
 router.get("/api/projetos/:id", projetoController.getProjetoById); // . Retorna um projeto específico
+router.get(
+  "/api/projetos/:id/descricao",
+  projetoController.getDescricaoProjeto
+); // . Retorna a descrição de um projeto
 router.put("/api/projetos/:id", projetoController.updateProjeto); // . Atualiza um projeto específico
 router.put("/api/projetos/:id/time", projetoController.addProjetoTime); // . Troca o time de um Projeto
 router.put("/api/projetos/:id/status", projetoController.atualizaStatusProjeto); // . Atualiza o status de um projeto específico

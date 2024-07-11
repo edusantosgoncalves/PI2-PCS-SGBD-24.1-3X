@@ -120,37 +120,34 @@ const UsuarioCriar = () => {
     Axios.get(
       `${serverPrefix}/api/usuarios/${document
         .getElementById("email")
-        .value.trim()}`
-    )
-      .then((response) => {
-        console.log(response.data);
-        // ! Se o usuário não existir, crie
-        if (response.data.hasOwnProperty("message")) {
-          if (response.data.message === "Usuário não encontrado") {
-            Axios.post(`${serverPrefix}/api/usuarios`, {
-              email: document.getElementById("email").value,
-              nome: document.getElementById("nome").value,
-              status: eAdmin ? 2 : 1, //Se for selecionado no checkbox admin, defina o status como 2, senão, defina como 1
-            }).then((response) => {
-              setSair(true);
-              setMensagem(
-                (document.getElementById("nome").value ?? "Usuário ") +
-                  " autorizada com sucesso!"
-              );
-            });
-          }
-        } else {
-          // ! Se existe, não deixa
-          setMsgAlerts("Usuário já cadastrado!");
-          setAbreNaoPode(true);
-          return;
-        }
-      })
-      .catch((erro) => {
-        setMsgAlerts(erro.response.message.toString());
+        .value.trim()}`,
+      {
+        validateStatus: function (status) {
+          return status < 500; // Resolve apenas se o status for menor que 500
+        },
+      }
+    ).then((response) => {
+      // ! Se o usuário não existir, crie
+      if (response.status === 404) {
+        Axios.post(`${serverPrefix}/api/usuarios`, {
+          email: document.getElementById("email").value,
+          nome: document.getElementById("nome").value,
+          status: eAdmin ? 2 : 1, //Se for selecionado no checkbox admin, defina o status como 2, senão, defina como 1
+        }).then((response) => {
+          setSair(true);
+          setMensagem(
+            (document.getElementById("nome").value ?? "Usuário ") +
+              " autorizada com sucesso!"
+          );
+        });
+      }
+      // ! Se existe, não deixa
+      else if (response.status === 200) {
+        setMsgAlerts("Usuário já cadastrado!");
         setAbreNaoPode(true);
         return;
-      });
+      }
+    });
   };
 
   return (

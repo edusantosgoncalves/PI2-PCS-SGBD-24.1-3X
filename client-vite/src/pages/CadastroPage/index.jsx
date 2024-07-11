@@ -72,11 +72,10 @@ const CadastroPage = () => {
     //Inserindo-os nas variáveis
     setUsuarioEmail(usuarioLS.email);
     document.getElementById("funcao").value = usuarioLS.funcao;
-    document.getElementById("CEP").value = usuarioLS["CEP"];
+    document.getElementById("CEP").value = usuarioLS["cep"];
     buscaEndereco();
-    document.getElementById("CEP_numEnd").value = usuarioLS.CEP_numEnd;
-    document.getElementById("CEP_complemento").value =
-      usuarioLS.CEP_complemento;
+    document.getElementById("CEP_numEnd").value = usuarioLS.cepnumEndereco;
+    document.getElementById("CEP_complemento").value = usuarioLS.cepComplemento;
   }, []);
 
   //! Função que atualiza os dados do usuário no banco e redireciona a página indicada
@@ -122,53 +121,35 @@ const CadastroPage = () => {
       }
     ).then((response) => {
       if (response.status === 201) {
+        let status = 3;
+
+        // Se o usuario for admin, troque o status ativo dele para o status de admin
         if (locationState.admin === "true") {
-          Axios.put(
-            `${serverPrefix}/api/usuarios/${
-              document.getElementById("email").value
-            }/status`,
-            {
-              status: 4,
-            }
-          ).then((resposta2) => {
-            if (resposta2.status >= 200 && resposta2.status <= 300) {
-              Axios.get(
-                `${serverPrefix}/api/usuarios/${locationState.usuario.email}`
-              ).then((responseUsuario) => {
-                if (responseUsuario.status === 200) {
-                  localStorage.setItem(
-                    "usuario",
-                    JSON.stringify(responseUsuario.data)
-                  );
-                  redirect("/home");
-                }
-              });
-            }
-          });
-        } else {
-          Axios.put(
-            `${serverPrefix}/api/usuarios/${
-              document.getElementById("email").value
-            }/status`,
-            {
-              status: 3,
-            }
-          ).then((resposta2) => {
-            if (resposta2.status >= 200 && resposta2.status <= 300) {
-              Axios.get(
-                `${serverPrefix}/api/usuarios/${locationState.usuario.email}`
-              ).then((responseUsuario) => {
-                if (responseUsuario.status === 200) {
-                  localStorage.setItem(
-                    "usuario",
-                    JSON.stringify(responseUsuario.data)
-                  );
-                  redirect("/home");
-                }
-              });
-            }
-          });
+          status = 4;
         }
+
+        Axios.put(
+          `${serverPrefix}/api/usuarios/${
+            document.getElementById("email").value
+          }/status`,
+          {
+            status: status,
+          }
+        ).then((resposta2) => {
+          if (resposta2.status >= 200 && resposta2.status <= 300) {
+            Axios.get(
+              `${serverPrefix}/api/usuarios/${locationState.usuario.email}`
+            ).then((responseUsuario) => {
+              if (responseUsuario.status === 200) {
+                localStorage.setItem(
+                  "usuario",
+                  JSON.stringify(responseUsuario.data)
+                );
+                redirect("/home");
+              }
+            });
+          }
+        });
       }
     });
   };
@@ -185,18 +166,16 @@ const CadastroPage = () => {
         try {
           Axios.get("https://viacep.com.br/ws/" + cep + "/json/").then(
             (response) => {
-              // setEndereco(response.data)
-
-              // Test if response is empty
+              // Verificando se a resposta foi vazia
               if (response.data.erro) {
                 setMsgAlerts("CEP não encontrado!");
                 setAbreNaoPode(true);
-                //alert("CEP não encontrado!");
                 document.getElementById("CEP").value = "";
                 setJaCarregou(true);
                 return;
               }
 
+              // Se for recebido, preencher os campos
               document.getElementById("endereco").value =
                 response.data.logradouro;
               document.getElementById("cidade").value =
@@ -207,7 +186,6 @@ const CadastroPage = () => {
           );
         } catch (error) {
           setJaCarregou(true);
-          console.log(error);
         }
       } else {
         setMsgAlerts("CEP inválido!");
@@ -320,8 +298,16 @@ const CadastroPage = () => {
             noValidate
             autoComplete="off"
           >
-            <TextField id="linkedin" label="LinkedIn" defaultValue="" />
-            <TextField id="github" label="GitHub" defaultValue="" />
+            <TextField
+              id="linkedin"
+              label="LinkedIn (link do perfil)"
+              defaultValue=""
+            />
+            <TextField
+              id="github"
+              label="GitHub (link do perfil)"
+              defaultValue=""
+            />
           </Box>
 
           <div className="areaBtns">

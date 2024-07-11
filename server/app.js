@@ -105,7 +105,6 @@ app.get(
         console.error("Error regenerating session:", err);
         res.redirect("/google/error");
       }
-      console.log(userProfile._json);
       res.redirect("/google/success");
     });
   }

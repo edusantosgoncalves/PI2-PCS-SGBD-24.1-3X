@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import "./stylesTarefasSeguidas.css";
 
@@ -35,9 +35,6 @@ import BarraLogo from "../../../components/BarraLogo";
 import MuiEstilosPersonalizados from "../../../components/MuiEstilosPersonalizados";
 
 const TarefasSeguidas = () => {
-  // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página e receber dados da página redirecionadora
-  const location = useLocation();
-
   // ! Instanciando o useNavigate para redirecionar o usuário pra alguma página
   const redirect = useNavigate();
 
@@ -74,10 +71,10 @@ const TarefasSeguidas = () => {
   // ! Declarando variavel que receberá todas as tarefas do sistema
   const [listaTarefas, setListaTarefas] = React.useState([
     {
-      codTarefa: "",
+      idTarefa: "",
       nomeTarefa: "",
       descricao: "",
-      codIteracaoFK: "",
+      idIteracao: "",
       nomeIteracao: "",
       codProjetoFK: "",
       nomeProjeto: "",
@@ -92,7 +89,7 @@ const TarefasSeguidas = () => {
       id: "",
       nomeTarefa: "",
       descricao: "",
-      codIteracaoFK: "",
+      idIteracao: "",
       nomeIteracao: "",
       codProjetoFK: "",
       nomeProjeto: "",
@@ -167,13 +164,13 @@ const TarefasSeguidas = () => {
 
   // ! Declarando variável que receberá o usuário selecionado a partir da tabela (será redirecionado para páginas de alteração...)
   const [tarefaSelecionada, setTarefaSelecionada] = React.useState({
-    codTarefa: "",
+    idTarefa: "",
     nome: "",
     descricao: "",
     status: "",
     projetoTarefa: "",
     nomeProjeto: "",
-    codIteracaoFK: "",
+    idIteracao: "",
     nomeIteracao: "",
     usuarioResp: "",
     nomeUsuarioResp: "",

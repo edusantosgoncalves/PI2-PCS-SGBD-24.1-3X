@@ -14,25 +14,25 @@ module.exports = {
 
   async updateTarefa(req, res) {
     const { id } = req.params;
-    const { nome, descricao, status, codIteracaoFK, usuarioResp } = req.body;
+    const { nome, descricao, status, idIteracao, usuarioResp } = req.body;
     const updated = await TarefaService.updateTarefa(
       id,
       nome,
       descricao,
       status,
-      codIteracaoFK,
+      idIteracao,
       usuarioResp
     );
     return res.json(updated);
   },
 
   async addTarefa(req, res) {
-    const { nome, descricao, status, codIteracaoFK, usuarioResp } = req.body;
+    const { nome, descricao, status, idIteracao, usuarioResp } = req.body;
     const added = await TarefaService.addTarefa(
       nome,
       descricao,
       status,
-      codIteracaoFK,
+      idIteracao,
       usuarioResp
     );
     return res.json(added);
@@ -90,7 +90,11 @@ module.exports = {
 
     const comentario = await TarefaService.addComentario(id, descricao, email);
 
-    return res.json(comentario);
+    if (comentario.message) return res.status(400).json(comentario);
+    if (!comentario)
+      return res.status(404).json({ message: "Tarefa não encontrada" });
+
+    return res.status(201).json(comentario);
   },
 
   async getTarefasByIteracao(req, res) {
