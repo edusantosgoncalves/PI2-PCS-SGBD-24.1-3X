@@ -3,7 +3,7 @@ async function Functions(sequelize) {
   // * getTimesUsuario()
   try {
     await sequelize.query(
-      `create function gettimesusuario("Usuario" integer)
+      `create function "3x".gettimesusuario("Usuario" integer)
     returns TABLE("codTime" integer, nome character varying, "dtCriacao" timestamp with time zone, ativo boolean, "qtdPess" bigint, "qtdProj" bigint)
     language plpgsql
     as
@@ -23,7 +23,7 @@ async function Functions(sequelize) {
   // * getProjetosUsuario()
   try {
     await sequelize.query(
-      `create function getprojetosusuario("Usuario" integer)
+      `create function "3x".getprojetosusuario("Usuario" integer)
     returns TABLE("codProjeto" integer, nome character varying, "dtCriacao" text, "timeResponsavel" integer, "nomeTime" character varying, "Prazo" text, ativo boolean, "dtConclusao" text, "qtdTarefas" bigint)
     language plpgsql
     as
@@ -53,7 +53,7 @@ async function Functions(sequelize) {
   // * getDashboardAdmin()
   try {
     await sequelize.query(
-      `create function getdashboardadmin("Usuario" integer)
+      `create function "3x".getdashboardadmin("Usuario" integer)
     returns TABLE("qtdTimesUsuario" bigint, "qtdTimesSys" bigint, "qtdProjetosUsuario" bigint, "qtdProjetosSys" bigint, "qtdTarefas" bigint, "qtdTarefasSys" bigint, "qtdTarefasSemana" bigint, "qtdUsuarios" bigint)
     language plpgsql
     as
@@ -132,7 +132,7 @@ async function Functions(sequelize) {
   // * getDashboard()
   try {
     await sequelize.query(
-      `create function getdashboard("Usuario" integer)
+      `create function "3x".getdashboard("Usuario" integer)
     returns TABLE("qtdTimesUsuario" bigint, "qtdProjetosUsuario" bigint, "qtdTarefas" bigint, "qtdTarefasSemana" bigint)
     language plpgsql
     as
@@ -172,7 +172,7 @@ async function Functions(sequelize) {
   // * RetornaUsuariosDeUmTime()
   try {
     await sequelize.query(
-      `create function retornausuariosdeumtime("Time" integer)
+      `create function "3x".retornausuariosdeumtime("Time" integer)
     returns TABLE(email character varying, nome character varying)
     language plpgsql
     as
@@ -191,7 +191,7 @@ async function Functions(sequelize) {
   // * RetornaProjetosDeUmTime()
   try {
     await sequelize.query(
-      `create function retornaprojetosdeumtime("Time" integer)
+      `create function "3x".retornaprojetosdeumtime("Time" integer)
     returns TABLE("codProjeto" integer, nome character varying)
     language plpgsql
     as
@@ -209,7 +209,7 @@ async function Functions(sequelize) {
   // * getIteracoesProjetos()
   try {
     await sequelize.query(
-      `create function getiteracoesprojetos("Projeto" integer)
+      `create function "3x".getiteracoesprojetos("Projeto" integer)
     returns TABLE("codIteracao" integer, nome character varying, descricao text, "dtInicio" text, "dtConclusao" text, "codProjetoFK" integer)
     language plpgsql
     as
@@ -246,7 +246,7 @@ async function Functions(sequelize) {
   // * getTarefasProjeto()
   try {
     await sequelize.query(
-      `create function gettarefasprojeto("Projeto" integer)
+      `create function "3x".gettarefasprojeto("Projeto" integer)
     returns TABLE("codTarefa" integer, nome character varying, descricao text, status integer)
     language plpgsql
     as
