@@ -21,7 +21,7 @@ router.post("/api/usuarios/:email/times", UsuarioController.addUserTeam); // . A
 router.get(
   "/api/usuarios/:email/dashboard/:adm",
   UsuarioController.getDashboard
-); // . Gera dashboard de um usuario (:adm - 0 -> true / 1 -> false)
+); // . Gera dashboard de um usuario (:adm - 1 -> true / 0 -> false)
 
 // ! Funcoes de admin
 router.post("/api/usuarios", UsuarioController.addUser); // . Cadastra um usuário
