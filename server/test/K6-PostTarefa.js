@@ -11,9 +11,13 @@ export const options = {
 };
 
 export default function teste() {
-  let res = http.get(
-    "http://localhost:1003/api/usuarios/edusantos@edu.unirio.br/avaliacoes-feitas"
-  );
+  let res = http.post("http://localhost:1003/api/tarefas", {
+    nome: "Tarefa do K6",
+    descricao: "Essa é uma tarefa do K6",
+    status: 1,
+    idIteracao: 1,
+    usuarioResp: "edusantos@edu.unirio.br",
+  });
 
   check(res, {
     "status is 200": (r) => r.status == 200, // Verificação se a requisição foi realizada
