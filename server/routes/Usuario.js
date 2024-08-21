@@ -78,7 +78,7 @@ router.get(
 ); // . Busca avaliações de um usuario (avaliado)
 
 router.get(
-  "/api/usuarios/:email/avaliacoes-feitas",
+  "/api/usuarios/:id/avaliacoes-feitas",
   UsuarioController.getAvaliacoesDeUsuario
 ); // . Busca avaliações de um usuario (avaliador)
 

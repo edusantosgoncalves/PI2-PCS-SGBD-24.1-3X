@@ -59,9 +59,9 @@ module.exports = {
   },
 
   async getAvaliacoesDeUsuario(req, res) {
-    const { email } = req.params;
+    const { id } = req.params;
 
-    const avaliacoes = await UsuarioService.getAvaliacoesDeUsuario(email);
+    const avaliacoes = await UsuarioService.getAvaliacoesDeUsuario(id);
     return res.json(avaliacoes);
   },
 

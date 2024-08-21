@@ -98,9 +98,9 @@ class ProjetoRepository {
       status: status,
       idIteracao: idIteracao,
       idUsuario: idUsuario,
-    }).then((tarefa) => {
+    }); /*.then((tarefa) => {
       return tarefa.get({ plain: true });
-    });
+    })*/
 
     return novaTarefa;
   }

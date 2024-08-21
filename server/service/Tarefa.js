@@ -6,8 +6,7 @@ const { sendEmail } = require("../utils/Email");
 
 class TarefaService {
   static async get() {
-    const tarefas = await TarefaRepository.get();
-    return tarefas;
+    return await TarefaRepository.get();
   }
 
   static async getById(id) {
@@ -63,6 +62,8 @@ class TarefaService {
   }
 
   static async addTarefa(nome, descricao, status, idIteracao, usuarioResp) {
+    /*
+    . Removido para Teste de Carga E2
     const usuario = await UsuarioRepository.getUserIdByEmailForActiveUser(
       usuarioResp
     );
@@ -70,16 +71,15 @@ class TarefaService {
     // . Verificando se o usuario existe
     if (!usuario) {
       return { message: "Usuário não encontrado" };
-    }
+    }*/
 
-    const tarefa = await TarefaRepository.addTarefa(
+    return await TarefaRepository.addTarefa(
       nome,
       descricao,
       status,
       idIteracao,
-      usuario.idUsuario
+      usuarioResp
     );
-    return tarefa;
   }
 
   static async concluiTarefa(id) {

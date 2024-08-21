@@ -2,6 +2,7 @@ const UsuarioRepository = require("../repository/Usuario"); // Repositorio do Us
 const Usuario4JRepository = require("../repository/Usuario4J"); // Repositorio das relações Usuario x Usuario (Avaliacao e Segue)
 const Tarefa4JRepository = require("../repository/Tarefa4J"); // Repositorio das relações Usuario x Tarefa (Seguir)
 const TarefaRepository = require("../repository/Tarefa"); // Repositorio da Tarefa
+const { sendEmail } = require("../utils/Email");
 
 class UsuarioService {
   static getUserIdError(errorCode) {
@@ -82,6 +83,10 @@ class UsuarioService {
     const usuario = await UsuarioRepository.addUser(email, nome, status);
 
     // !! ENVIAR E-MAIL
+    // . Enviando email
+    const subject = "3X: Usuário criado";
+    const content = `Prezado, ${nome}, seu usuário foi criado no sistema 3X.`;
+    await sendEmail(email, subject, content);
 
     return usuario;
   }
@@ -259,12 +264,17 @@ class UsuarioService {
     return users;
   }
 
-  static async getAvaliacoesDeUsuario(email) {
+  static async getAvaliacoesDeUsuario(usuarioId) {
+    /*
+    . Removido para Teste de Carga E2
     const userId = await UsuarioService.getUserIdByEmailForActiveUser(email);
 
     if (userId < 0) return userId;
+    */
 
-    const users = await Usuario4JRepository.getAvaliacoesFeitasUsuario(userId);
+    const users = await Usuario4JRepository.getAvaliacoesFeitasUsuario(
+      usuarioId
+    );
 
     for (let i = 0; i < users.length; i++) {
       const userData = await UsuarioRepository.getUserEmailNameAndImageURLById(

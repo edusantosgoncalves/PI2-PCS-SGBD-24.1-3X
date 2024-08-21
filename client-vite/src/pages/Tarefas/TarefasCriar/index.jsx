@@ -191,7 +191,7 @@ const CriarTarefaPage = () => {
     }
 
     // ! verificar também se tem usuario e iteração selecionados!!!
-    if (usuarioSelecionado.hasOwnProperty("email") === false) {
+    if (usuarioSelecionado.hasOwnProperty("idUsuario") === false) {
       setAbreNaoPode(true);
       setMsgAlerts("A seleção de um usuário é obrigatória!");
       return;
@@ -219,7 +219,7 @@ const CriarTarefaPage = () => {
         descricao: document.getElementById("txt-descricao").value,
         status: statusCodSlc,
         idIteracao: iteracaoSelecionada.codIteracao,
-        usuarioResp: usuarioSelecionado.email,
+        usuarioResp: usuarioSelecionado.idUsuario,
       }).then((respostaCriaTarefa) => {
         console.log(respostaCriaTarefa);
         if (respostaCriaTarefa.status === 200) {
@@ -230,7 +230,6 @@ const CriarTarefaPage = () => {
     } else {
       setAbreNaoPode(true);
       setMsgAlerts("Selecione um usuário pertencente ao projeto selecionado!");
-      return;
     }
   };
 
