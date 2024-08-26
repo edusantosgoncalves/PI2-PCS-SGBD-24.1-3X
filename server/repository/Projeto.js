@@ -130,7 +130,7 @@ class ProjetoRepository {
   // Validado
   static async getTarefasProjetos(id) {
     const query = await sequelize.query(
-      `SELECT * FROM "3x".getTarefasProjeto(${id})`
+      `SELECT "codTarefa" as "idTarefa", nome, descricao, status FROM "3x".getTarefasProjeto(${id})`
     );
 
     return query[0];
