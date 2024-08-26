@@ -74,7 +74,8 @@ const UsuarioCriar = () => {
     setLocationState({ admin: adminLS, usuario: usuarioLS });
 
     // ! Buscando avs...
-    buscarAvsFeitas(usuarioLS.email);
+    console.log(usuarioLS);
+    buscarAvsFeitas(usuarioLS.codUsuario);
     buscarMinhasAvs(usuarioLS.email);
   }, []);
 
@@ -123,8 +124,9 @@ const UsuarioCriar = () => {
       });
   };
 
-  const buscarAvsFeitas = (email) => {
-    Axios.get(`${serverPrefix}/api/usuarios/${email}/avaliacoes-feitas`)
+  const buscarAvsFeitas = (id) => {
+    if (!id) return;
+    Axios.get(`${serverPrefix}/api/usuarios/${id}/avaliacoes-feitas`)
       .then((response) => {
         setAvRealizadas(response.data);
         setJaCarregou(true);

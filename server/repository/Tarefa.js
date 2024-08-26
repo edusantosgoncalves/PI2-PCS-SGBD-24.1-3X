@@ -7,7 +7,7 @@ const {
   Projeto: ProjetoModel,
 } = require("../database/db");
 
-class ProjetoRepository {
+class TarefaRepository {
   // Validado
   static async get() {
     const query = await sequelize.query(
@@ -98,9 +98,9 @@ class ProjetoRepository {
       status: status,
       idIteracao: idIteracao,
       idUsuario: idUsuario,
-    }).then((tarefa) => {
+    }); /*.then((tarefa) => {
       return tarefa.get({ plain: true });
-    });
+    })*/
 
     return novaTarefa;
   }
@@ -189,4 +189,4 @@ class ProjetoRepository {
   }
 }
 
-module.exports = ProjetoRepository;
+module.exports = TarefaRepository;
