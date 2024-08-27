@@ -220,6 +220,11 @@ const TarefasMinhas = () => {
     Axios.put(`${serverPrefix}/api/tarefas-view/usuario`, {
       email: usuario,
     }).then((response) => {
+      if (response.data.length === 0) {
+        setJaCarregou(true);
+        return;
+      }
+
       setListaTarefas(response.data);
       setListaTarefasFiltrada(response.data);
 
